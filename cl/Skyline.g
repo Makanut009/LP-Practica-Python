@@ -1,12 +1,13 @@
 grammar Skyline;
 
-root : instruccio EOF ;
+root : instruccio+ EOF;
 
-instruccio: assig | expr;
+instruccio: (assig | expr) NL;
 assig: VAR ':=' expr;
 
 expr:
-    | '(' expr ')'
+    | edifici
+    //| '(' expr ')'
 	| expr PER expr
 	| expr MES expr
 	| expr MENYS expr
@@ -14,10 +15,13 @@ expr:
 
 simbol: VAR | NUM;
 
+edifici: '(' NUM ',' NUM ',' NUM ')';
+
 VAR: [a-z]+;
 NUM : [0-9]+;
 PER : '*';
 MES : '+' ;
 MENYS : '-' ;
-WS : [ \n]+ -> skip;
+//WS : [ \n]+ -> skip;
+NL : '\n' ;
 // WS: [ \n\r]+ -> skip;

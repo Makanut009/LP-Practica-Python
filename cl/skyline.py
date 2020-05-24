@@ -165,29 +165,31 @@ class Skyline:
         return nou_sky
 
 
-    def replica_skyline(self, N): #Es podria fer amb map? Retornar un nou skyline?
-        edificis = self.edificis.copy()
+    def replica_skyline(self, N): #Es podria fer amb map?
+        sky_nou = Skyline()
+        edificis = self.edificis
         esq = edificis[0][0]
         dreta = edificis[len(edificis)-1][2]
         mida = dreta - esq
 
-        for i in range(1, N):
+        for i in range(0, N):
             for e in edificis:
-                self.edificis.append((e[0]+mida*i, e[1], e[2]+mida*i))
+                sky_nou.edificis.append((e[0]+mida*i, e[1], e[2]+mida*i))
+        return sky_nou
 
 
-    def desp_dreta(self, N): #Es podria fer amb map? Retornar un nou skyline?
-        edificis = []
+    def desp_dreta(self, N): #Es podria fer amb map?
+        sky_nou = Skyline()
         for e in self.edificis:
-            edificis.append((e[0]+N, e[1], e[2]+N))
-        self.edificis = edificis
+            sky_nou.edificis.append((e[0]+N, e[1], e[2]+N))
+        return sky_nou
 
 
-    def desp_esq(self, N): #Es podria fer amb map? Retornar un nou skyline?
-        edificis = []
+    def desp_esq(self, N): #Es podria fer amb map?
+        sky_nou = Skyline()
         for e in self.edificis:
-            edificis.append((e[0]-N, e[1], e[2]-N))
-        self.edificis = edificis
+            sky_nou.edificis.append((e[0]-N, e[1], e[2]-N))
+        return sky_nou
 
 
     def area(self):
