@@ -63,20 +63,21 @@ class Skyline:
 
 
     def unio(self, skyline):
-        res = []
+        resultat = self
         for e in skyline.edificis:
-            res = self.unir_edifici(e)
-        return res
+            resultat = resultat.unir_edifici(e)
+        return resultat
 
     def interseccio(self, skyline):
-        res = []
+        resultat = self
         for e in skyline.edificis:
-            res = self.intersectar_edifici(e)
-        return res
+            resultat = resultat.intersectar_edifici(e)
+        return resultat
 
 
     def unir_edifici(self, edifici):
         edificis = self.edificis
+        nou_sky = Skyline()
         res = []
 
         xmin, alt, xmax = edifici[0], edifici[1], edifici[2]
@@ -135,12 +136,12 @@ class Skyline:
             else:
                 res += [(sky_xmax, alt, xmax)]
 
-        x = Skyline()
-        x.edificis = res
-        return x
+        nou_sky.edificis = res
+        return nou_sky
 
 
     def intersectar_edifici(self, edifici):
+        nou_sky = Skyline()
         edificis = self.edificis
         res = []
 
@@ -149,23 +150,20 @@ class Skyline:
         esq = max(edificis[0][0], xmin)
         dreta = min(edificis[len(edificis)-1][2], xmax)
 
-        if esq >= dreta:
-            return res
-        else:
+        if esq < dreta:
             for e in edificis:
                 esq = max(e[0], xmin)
                 dreta = min(e[2], xmax)
                 res += [(esq, alt, dreta)] if alt <= e[1] else [(esq, e[1], dreta)]
-            return res
+
+        nou_sky.edificis = res
+        return nou_sky
 
 
 def main():
     sk1 = Skyline(1, 2, 3)
-    sk1.edificis = sk1.unir_edifici((2,3,4))
-    # sk2 = Skyline(4,5,10)
-    # res1 = sk1+sk2
-    # sk3 = Skyline(0,0,0)
-    # print(res1)
+    sk1 = sk1.unir_edifici((2,3,4))
+    sk1 = sk1.unir_edifici((7,2,9))
     sk1.mostra()
     
 
