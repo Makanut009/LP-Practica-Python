@@ -18,6 +18,8 @@ class Skyline:
 
         elif isinstance(other, int):
             print("Replicacio N vegades de l'skyline")
+            return self.replica_skyline(other)
+
         else:
             return NotImplemented
 
@@ -31,6 +33,8 @@ class Skyline:
 
         elif isinstance(other, int):
             print("Desplaçament a la dreta de l’skyline N posicions")
+            return self.desp_dreta(other)
+
         else:
             return NotImplemented
 
@@ -40,6 +44,7 @@ class Skyline:
     def __sub__(self, other):
         if isinstance(other, int):
             print("Desplaçament a l’esquerra de l’skyline N posicions")
+            return self.desp_esq(other)
         else:
             return NotImplemented
 
@@ -71,7 +76,7 @@ class Skyline:
     def interseccio(self, skyline):
         resultat = self
         for e in skyline.edificis:
-            resultat = resultat.intersectar_edifici(e)
+            resultat = resultat.intersecar_edifici(e)
         return resultat
 
 
@@ -140,7 +145,7 @@ class Skyline:
         return nou_sky
 
 
-    def intersectar_edifici(self, edifici):
+    def intersecar_edifici(self, edifici):
         nou_sky = Skyline()
         edificis = self.edificis
         res = []
@@ -160,10 +165,39 @@ class Skyline:
         return nou_sky
 
 
+    def replica_skyline(self, N): #Es podria fer amb map? Retornar un nou skyline?
+        edificis = self.edificis.copy()
+        esq = edificis[0][0]
+        dreta = edificis[len(edificis)-1][2]
+        mida = dreta - esq
+
+        for i in range(1, N):
+            for e in edificis:
+                self.edificis.append((e[0]+mida*i, e[1], e[2]+mida*i))
+
+
+    def desp_dreta(self, N): #Es podria fer amb map? Retornar un nou skyline?
+        edificis = []
+        for e in self.edificis:
+            edificis.append((e[0]+N, e[1], e[2]+N))
+        self.edificis = edificis
+
+
+    def desp_esq(self, N): #Es podria fer amb map? Retornar un nou skyline?
+        edificis = []
+        for e in self.edificis:
+            edificis.append((e[0]-N, e[1], e[2]-N))
+        self.edificis = edificis
+
+
+
+
 def main():
     sk1 = Skyline(1, 2, 3)
     sk1 = sk1.unir_edifici((2,3,4))
-    sk1 = sk1.unir_edifici((7,2,9))
+    #sk1 = sk1.unir_edifici((7,2,9))
+    sk1.mostra()
+    sk1-4
     sk1.mostra()
     
 
