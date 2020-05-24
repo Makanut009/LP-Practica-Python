@@ -190,15 +190,22 @@ class Skyline:
         self.edificis = edificis
 
 
+    def area(self):
+        return sum([(e[2]-e[0])*e[1] for e in self.edificis])
+
+    def alcada(self):
+        return max([e[1] for e in self.edificis])
 
 
 def main():
     sk1 = Skyline(1, 2, 3)
     sk1 = sk1.unir_edifici((2,3,4))
-    #sk1 = sk1.unir_edifici((7,2,9))
+    sk1 = sk1.unir_edifici((7,2,9))
+    #sk1.mostra()
+    #sk1-4
     sk1.mostra()
-    sk1-4
-    sk1.mostra()
+    print(sk1.area())
+    print(sk1.alcada())
     
 
     # if isinstance(a, list):
