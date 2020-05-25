@@ -1,2 +1,6 @@
 Telegram
 .vscode/settings.json
+__pycache__
+cl/__pycache__
+cl/.antlr
+*.png
