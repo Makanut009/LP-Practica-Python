@@ -35,7 +35,12 @@ class EvalVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx:SkylineParser.ExprContext):
         if ctx.getChildCount() == 1:
-            return self.visit(ctx.simbol())
+            return self.visit(next(ctx.getChildren()))
+            # ch = next(ctx.getChildren())
+            # if ch == ctx.simbol():
+            #     return self.visit(ctx.simbol())
+            # elif ch == ctx.simbol():
+                
 
         elif ctx.getChildCount() == 2:
             return - self.visit(ctx.simbol())
@@ -75,6 +80,26 @@ class EvalVisitor(ParseTreeVisitor):
         g = ctx.getChildren()
         l = [next(g).getText() for i in range(ctx.getChildCount())]
         return Skyline(int(l[1]), int(l[3]), int(l[5]))
+
+
+    # Visit a parse tree produced by SkylineParser#compost.
+    def visitCompost(self, ctx:SkylineParser.CompostContext):
+        sk = Skyline()
+        g = ctx.getChildren()
+        for i in range(ctx.getChildCount()):
+            ch = next(g)
+            if not isinstance(ch, tree.Tree.TerminalNode):
+                sk = sk.unio(self.visit(ch))
+        return sk
+
+
+    # Visit a parse tree produced by SkylineParser#random.
+    def visitRandom(self, ctx:SkylineParser.RandomContext):
+        g = ctx.getChildren()
+        l = [next(g).getText() for i in range(ctx.getChildCount())]
+        sk = Skyline()
+        sk.random(int(l[1]), int(l[3]), int(l[5]), int(l[7]), int(l[9]))
+        return sk
 
 
 # if next(ctx.getChildren()) == ctx.edifici():

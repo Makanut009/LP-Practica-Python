@@ -39,5 +39,15 @@ class SkylineVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by SkylineParser#compost.
+    def visitCompost(self, ctx:SkylineParser.CompostContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SkylineParser#random.
+    def visitRandom(self, ctx:SkylineParser.RandomContext):
+        return self.visitChildren(ctx)
+
+
 
 del SkylineParser

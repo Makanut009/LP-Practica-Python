@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
+import random
 
 class Skyline:
     def __init__(self, xmin = None, alt = None, xmax = None):
@@ -10,6 +11,30 @@ class Skyline:
 
     # def __repr__(self):
     #     return self.__str__()
+
+    def random(self, n, h, w, xmin, xmax):
+        if n < 1:
+            raise Exception
+        if h < 0:
+            raise Exception
+        if w < 1:
+            raise Exception
+        if xmax <= xmin:
+            raise Exception
+
+        edificis = []
+
+        for i in range(n):
+            alt = random.randint(0,h)
+            esq = ampl = xmax
+            while esq + ampl > xmax:
+                esq = random.randint(xmin, xmax)
+                ampl = random.randint(1,min(w, xmax-xmin))
+                dreta = esq + ampl                
+            edificis += [(esq, alt, esq+w)]
+
+        self.edificis = edificis
+
 
     def __mul__(self, other):
         if isinstance(other, self.__class__):
@@ -70,9 +95,13 @@ class Skyline:
 
     def unio(self, skyline):
         resultat = self
-        for e in skyline.edificis:
-            resultat = resultat.unir_edifici(e)
+        if not resultat.edificis:
+            resultat.edificis = skyline.edificis
+        else:
+            for e in skyline.edificis:
+                resultat = resultat.unir_edifici(e)
         return resultat
+
 
     def interseccio(self, skyline):
         resultat = self

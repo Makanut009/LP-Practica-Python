@@ -7,6 +7,8 @@ assig: VAR ':=' expr;
 
 expr
     : simbol
+    | compost
+    | random
 	| expr PER expr
 	| expr MES expr
 	| expr MENYS expr
@@ -17,6 +19,9 @@ simbol: edifici | VAR | NUM;
 
 edifici: '(' NUM ',' NUM ',' NUM ')';
 
+compost: '[' edifici (',' edifici)* ']';
+
+random: '{' NUM ',' NUM ',' NUM ',' NUM ',' NUM '}';
 
 LPAREN: '(';
 RPAREN: ')';
