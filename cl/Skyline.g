@@ -1,8 +1,8 @@
 grammar Skyline;
 
-root : instruccio+ EOF;
+root : instruccio EOF;
 
-instruccio: (assig | expr) NL;
+instruccio: (assig | expr);
 assig: VAR ':=' expr;
 
 expr:

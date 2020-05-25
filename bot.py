@@ -8,6 +8,7 @@ from cl.SkylineParser import SkylineParser
 from cl.EvalVisitor import EvalVisitor
 
 from skyline import Skyline
+import matplotlib.pyplot as plt
 
 import traceback
 
@@ -58,17 +59,30 @@ def aux(update, context):
     parser = SkylineParser(token_stream)
     tree = parser.root()
     #visitor = EvalVisitor()
-    sk = Skyline()
-    (var, sk) = visitor.visit(tree)
-    print("VaR: ", var)
     
     try:
-        sk.mostra()
+        (var, sk) = visitor.visit(tree)
+    except KeyError:
+        print("Aquest identificador no existeix")
     except Exception as err:
-        traceback.print_tb(err.__traceback__)
         print(traceback.format_exc())
-        # or
         print(sys.exc_info())
+
+    print("Var: ", var)
+
+    xs = []
+    alts = []
+    for e in sk.edificis:
+        xs += [i for i in range(e[0], e[2])]
+        n = (e[2] - e[0])
+        alts += [e[1]]*n
+    
+    plt.bar(xs, alts, width=1, align='edge', color=['red'])
+    plt.savefig('plot.png')
+    plt.close()
+
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=open('plot.png', 'rb'))
+    
 
 # declara una constant amb el access token que llegeix de token.txt
 TOKEN = open('token.txt').read().strip()

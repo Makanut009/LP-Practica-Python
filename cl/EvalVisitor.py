@@ -14,7 +14,6 @@ class EvalVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by SkylineParser#root.
     def visitRoot(self, ctx:SkylineParser.RootContext):
         r = self.visit(next(ctx.getChildren()))
-        print("Root: ", type(r))
         return r
 
 
@@ -27,7 +26,6 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#assig.
     def visitAssig(self, ctx:SkylineParser.AssigContext):
-        print("Flag1")
         res = self.visit(ctx.expr())
         self.taula_simbols[ctx.VAR().getText()] = res
         return (ctx.VAR().getText(), res)
@@ -46,28 +44,31 @@ class EvalVisitor(ParseTreeVisitor):
 
             if l[1].getSymbol().type == SkylineParser.PER:
                 sk = self.visit(l[0]) * self.visit(l[2])
-                print("Expr: ", type(sk))
                 return sk
 
             elif l[1].getSymbol().type == SkylineParser.MES:
                 sk = self.visit(l[0]) + self.visit(l[2])
-                print("Expr: ", type(sk))
                 return sk
 
             elif l[1].getSymbol().type == SkylineParser.MENYS:
                 sk = self.visit(l[0]) - self.visit(l[2])
-                sk.mostra()
                 return sk
 
     # Visit a parse tree produced by SkylineParser#edifici.
     def visitEdifici(self, ctx:SkylineParser.EdificiContext):
         g = ctx.getChildren()
-        print("Flagg")
         l = [next(g).getText() for i in range(ctx.getChildCount())]
         return Skyline(int(l[1]), int(l[3]), int(l[5]))
 
     # Visit a parse tree produced by SkylineParser#simbol.
     def visitSimbol(self, ctx:SkylineParser.SimbolContext):
-        isVar = ctx.VAR() is not None
-        print("Flagggggggggggg1")
-        return self.taula_simbols[ctx.getText()] if isVar else int(ctx.getText())
+        es_var = ctx.VAR() is not None
+        # if es_var:
+        #     variable = ctx.getText()
+        #     if variable in taula_simbols:
+        #         return self.taula_simbols[ctx.getText()]
+        #     else:
+        #         raise KeyError
+        # else:
+        #     return int(ctx.getText())
+        return self.taula_simbols[ctx.getText()] if es_var else int(ctx.getText())

@@ -80,13 +80,10 @@ public class SkylineParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class RootContext extends ParserRuleContext {
+		public InstruccioContext instruccio() {
+			return getRuleContext(InstruccioContext.class,0);
+		}
 		public TerminalNode EOF() { return getToken(SkylineParser.EOF, 0); }
-		public List<InstruccioContext> instruccio() {
-			return getRuleContexts(InstruccioContext.class);
-		}
-		public InstruccioContext instruccio(int i) {
-			return getRuleContext(InstruccioContext.class,i);
-		}
 		public RootContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -97,30 +94,11 @@ public class SkylineParser extends Parser {
 		RootContext _localctx = new RootContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_root);
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(13); 
-			_errHandler.sync(this);
-			_alt = 1;
-			do {
-				switch (_alt) {
-				case 1:
-					{
-					{
-					setState(12);
-					instruccio();
-					}
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				setState(15); 
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
-			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-			setState(17);
+			setState(12);
+			instruccio();
+			setState(13);
 			match(EOF);
 			}
 		}
@@ -136,7 +114,6 @@ public class SkylineParser extends Parser {
 	}
 
 	public static class InstruccioContext extends ParserRuleContext {
-		public TerminalNode NL() { return getToken(SkylineParser.NL, 0); }
 		public AssigContext assig() {
 			return getRuleContext(AssigContext.class,0);
 		}
@@ -155,24 +132,22 @@ public class SkylineParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(21);
+			setState(17);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				{
-				setState(19);
+				setState(15);
 				assig();
 				}
 				break;
 			case 2:
 				{
-				setState(20);
+				setState(16);
 				expr(0);
 				}
 				break;
 			}
-			setState(23);
-			match(NL);
 			}
 		}
 		catch (RecognitionException re) {
@@ -203,11 +178,11 @@ public class SkylineParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25);
+			setState(19);
 			match(VAR);
-			setState(26);
+			setState(20);
 			match(T__0);
-			setState(27);
+			setState(21);
 			expr(0);
 			}
 		}
@@ -259,47 +234,47 @@ public class SkylineParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(32);
+			setState(26);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				{
 				}
 				break;
 			case 2:
 				{
-				setState(30);
+				setState(24);
 				edifici();
 				}
 				break;
 			case 3:
 				{
-				setState(31);
+				setState(25);
 				simbol();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(45);
+			setState(39);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(43);
+					setState(37);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(34);
+						setState(28);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(35);
+						setState(29);
 						match(PER);
-						setState(36);
+						setState(30);
 						expr(5);
 						}
 						break;
@@ -307,11 +282,11 @@ public class SkylineParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(37);
+						setState(31);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(38);
+						setState(32);
 						match(MES);
-						setState(39);
+						setState(33);
 						expr(4);
 						}
 						break;
@@ -319,20 +294,20 @@ public class SkylineParser extends Parser {
 						{
 						_localctx = new ExprContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(40);
+						setState(34);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(41);
+						setState(35);
 						match(MENYS);
-						setState(42);
+						setState(36);
 						expr(3);
 						}
 						break;
 					}
 					} 
 				}
-				setState(47);
+				setState(41);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			}
 			}
 		}
@@ -363,7 +338,7 @@ public class SkylineParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(42);
 			_la = _input.LA(1);
 			if ( !(_la==VAR || _la==NUM) ) {
 			_errHandler.recoverInline(this);
@@ -403,19 +378,19 @@ public class SkylineParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(50);
+			setState(44);
 			match(T__1);
-			setState(51);
+			setState(45);
 			match(NUM);
-			setState(52);
+			setState(46);
 			match(T__2);
-			setState(53);
+			setState(47);
 			match(NUM);
-			setState(54);
+			setState(48);
 			match(T__2);
-			setState(55);
+			setState(49);
 			match(NUM);
-			setState(56);
+			setState(50);
 			match(T__3);
 			}
 		}
@@ -450,22 +425,21 @@ public class SkylineParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\f=\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\6\2\20\n\2\r\2\16\2\21\3\2\3\2"+
-		"\3\3\3\3\5\3\30\n\3\3\3\3\3\3\4\3\4\3\4\3\4\3\5\3\5\3\5\5\5#\n\5\3\5\3"+
-		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\7\5.\n\5\f\5\16\5\61\13\5\3\6\3\6\3\7\3"+
-		"\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\2\3\b\b\2\4\6\b\n\f\2\3\3\2\7\b\2=\2\17"+
-		"\3\2\2\2\4\27\3\2\2\2\6\33\3\2\2\2\b\"\3\2\2\2\n\62\3\2\2\2\f\64\3\2\2"+
-		"\2\16\20\5\4\3\2\17\16\3\2\2\2\20\21\3\2\2\2\21\17\3\2\2\2\21\22\3\2\2"+
-		"\2\22\23\3\2\2\2\23\24\7\2\2\3\24\3\3\2\2\2\25\30\5\6\4\2\26\30\5\b\5"+
-		"\2\27\25\3\2\2\2\27\26\3\2\2\2\30\31\3\2\2\2\31\32\7\f\2\2\32\5\3\2\2"+
-		"\2\33\34\7\7\2\2\34\35\7\3\2\2\35\36\5\b\5\2\36\7\3\2\2\2\37#\b\5\1\2"+
-		" #\5\f\7\2!#\5\n\6\2\"\37\3\2\2\2\" \3\2\2\2\"!\3\2\2\2#/\3\2\2\2$%\f"+
-		"\6\2\2%&\7\t\2\2&.\5\b\5\7\'(\f\5\2\2()\7\n\2\2).\5\b\5\6*+\f\4\2\2+,"+
-		"\7\13\2\2,.\5\b\5\5-$\3\2\2\2-\'\3\2\2\2-*\3\2\2\2.\61\3\2\2\2/-\3\2\2"+
-		"\2/\60\3\2\2\2\60\t\3\2\2\2\61/\3\2\2\2\62\63\t\2\2\2\63\13\3\2\2\2\64"+
-		"\65\7\4\2\2\65\66\7\b\2\2\66\67\7\5\2\2\678\7\b\2\289\7\5\2\29:\7\b\2"+
-		"\2:;\7\6\2\2;\r\3\2\2\2\7\21\27\"-/";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\f\67\4\2\t\2\4\3"+
+		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\3\3\3\5\3\24\n\3\3"+
+		"\4\3\4\3\4\3\4\3\5\3\5\3\5\5\5\35\n\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
+		"\3\5\7\5(\n\5\f\5\16\5+\13\5\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3"+
+		"\7\2\3\b\b\2\4\6\b\n\f\2\3\3\2\7\b\2\66\2\16\3\2\2\2\4\23\3\2\2\2\6\25"+
+		"\3\2\2\2\b\34\3\2\2\2\n,\3\2\2\2\f.\3\2\2\2\16\17\5\4\3\2\17\20\7\2\2"+
+		"\3\20\3\3\2\2\2\21\24\5\6\4\2\22\24\5\b\5\2\23\21\3\2\2\2\23\22\3\2\2"+
+		"\2\24\5\3\2\2\2\25\26\7\7\2\2\26\27\7\3\2\2\27\30\5\b\5\2\30\7\3\2\2\2"+
+		"\31\35\b\5\1\2\32\35\5\f\7\2\33\35\5\n\6\2\34\31\3\2\2\2\34\32\3\2\2\2"+
+		"\34\33\3\2\2\2\35)\3\2\2\2\36\37\f\6\2\2\37 \7\t\2\2 (\5\b\5\7!\"\f\5"+
+		"\2\2\"#\7\n\2\2#(\5\b\5\6$%\f\4\2\2%&\7\13\2\2&(\5\b\5\5\'\36\3\2\2\2"+
+		"\'!\3\2\2\2\'$\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\t\3\2\2\2+)\3\2"+
+		"\2\2,-\t\2\2\2-\13\3\2\2\2./\7\4\2\2/\60\7\b\2\2\60\61\7\5\2\2\61\62\7"+
+		"\b\2\2\62\63\7\5\2\2\63\64\7\b\2\2\64\65\7\6\2\2\65\r\3\2\2\2\6\23\34"+
+		"\')";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

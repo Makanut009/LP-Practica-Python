@@ -174,6 +174,7 @@ class Skyline:
 
         for i in range(0, N):
             for e in edificis:
+                print(i)
                 sky_nou.edificis.append((e[0]+mida*i, e[1], e[2]+mida*i))
         return sky_nou
 
