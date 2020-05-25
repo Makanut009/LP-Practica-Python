@@ -196,10 +196,11 @@ class Skyline:
 
 
     def replica_skyline(self, N): #Es podria fer amb map?
+        print(self.edificis)
         sky_nou = Skyline()
         edificis = self.edificis
-        esq = edificis[0][0]
-        dreta = edificis[len(edificis)-1][2]
+        esq = min([edificis[i][0] for i in range(len(edificis))])
+        dreta = max([edificis[i][2] for i in range(len(edificis))])
         mida = dreta - esq
 
         for i in range(0, N):

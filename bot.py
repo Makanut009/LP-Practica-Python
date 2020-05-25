@@ -87,7 +87,9 @@ def aux(update, context):
     plt.savefig('plot.png')
     plt.close()
 
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=open('plot.png', 'rb'))
+    context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
+    context.bot.send_message(chat_id = update.effective_chat.id, text = ("area: " + str(sk.area())))
+    context.bot.send_message(chat_id = update.effective_chat.id, text = "alçada: " + str(sk.alcada()))
     
 
 # declara una constant amb el access token que llegeix de token.txt
