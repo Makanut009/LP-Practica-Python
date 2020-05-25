@@ -30,7 +30,6 @@ def help(update, context):
             "/save id: guarda un skyline amb el nom id.sky\n" +
             "/counter id: carrega un skyline de l’arxiu id.sky"
     )
-    print("Miau")
 
 
 def author(update, context):
@@ -51,19 +50,12 @@ def counter(update, context):
 
 def aux(update, context):
     input_stream = InputStream(update.message.text)
-    print(type(input_stream))
-    print(input_stream)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
-    print("Flag")
     tree = parser.root()
-    print("Flag2")
     visitor = EvalVisitor()
-    print("Flag3")
     visitor.visit(tree)
-    
-    print("Flag4")
 
 # declara una constant amb el access token que llegeix de token.txt
 TOKEN = open('token.txt').read().strip()
