@@ -76,16 +76,27 @@ def aux(update, context):
 
     print("Var: ", var)
 
+    print(len(sk.edificis))
+    print(sk.edificis)
+
     xs = []
     alts = []
     for e in sk.edificis:
         xs += [i for i in range(e[0], e[2])]
         n = (e[2] - e[0])
         alts += [e[1]]*n
+
+    print(len(xs), len(alts))
     
-    plt.bar(xs, alts, width=1, align='edge', color=['red'])
-    plt.savefig('plot.png')
-    plt.close()
+    try:
+        plt.bar(xs, alts, width=1, align='edge', color=['red'])
+        print("MAIAIAU")
+        plt.savefig('plot.png')
+        plt.close()
+    except Exception as err:
+        print(traceback.format_exc())
+        print(sys.exc_info())
+    
 
     context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
     context.bot.send_message(chat_id = update.effective_chat.id, text = ("area: " + str(sk.area())))

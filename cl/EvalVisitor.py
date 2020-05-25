@@ -98,7 +98,8 @@ class EvalVisitor(ParseTreeVisitor):
         g = ctx.getChildren()
         l = [next(g).getText() for i in range(ctx.getChildCount())]
         sk = Skyline()
-        sk.random(int(l[1]), int(l[3]), int(l[5]), int(l[7]), int(l[9]))
+        sk = sk.random(int(l[1]), int(l[3]), int(l[5]), int(l[7]), int(l[9]))
+        print(len( sk.edificis))
         return sk
 
 

@@ -33,7 +33,18 @@ class Skyline:
                 dreta = esq + ampl                
             edificis += [(esq, alt, esq+w)]
 
-        self.edificis = edificis
+        i=0
+        print(len(edificis))
+        for e in edificis:
+            #print(i)
+            if not self.edificis:
+                self.edificis = [e]
+            else:
+                self = self.unir_edifici(e)
+            i+=1
+
+        print(len(self.edificis))
+        return self
 
 
     def __mul__(self, other):
