@@ -5,23 +5,24 @@ root : instruccio EOF;
 instruccio: (assig | expr);
 assig: VAR ':=' expr;
 
-expr:
-    | edifici
-    //| '(' expr ')'
+expr
+    : simbol
 	| expr PER expr
 	| expr MES expr
 	| expr MENYS expr
-	| simbol;
+    | LPAREN expr RPAREN
+    | MENYS simbol;
 
-simbol: VAR | NUM;
+simbol: edifici | VAR | NUM;
 
 edifici: '(' NUM ',' NUM ',' NUM ')';
 
+
+LPAREN: '(';
+RPAREN: ')';
 VAR: [a-z]+;
 NUM : [0-9]+;
 PER : '*';
-MES : '+' ;
-MENYS : '-' ;
-//WS : [ \n]+ -> skip;
-NL : '\n' ;
-// WS: [ \n\r]+ -> skip;
+MES : '+';
+MENYS : '-';
+WS : [ \r\n\t] + -> skip;

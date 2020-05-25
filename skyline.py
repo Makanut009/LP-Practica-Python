@@ -50,6 +50,7 @@ class Skyline:
 
     def __neg__(self):
         print("Retorna l’skyline reflectit")
+        return Skyline(2,2,7)
 
     def __str__(self):
         return str(self.edificis)

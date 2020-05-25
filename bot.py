@@ -63,7 +63,13 @@ def aux(update, context):
     try:
         (var, sk) = visitor.visit(tree)
     except KeyError:
-        print("Aquest identificador no existeix")
+        context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = "Aquest identificador no existeix")
+    except TypeError:
+        context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = "Error de tipus: operació no suportada")
     except Exception as err:
         print(traceback.format_exc())
         print(sys.exc_info())
