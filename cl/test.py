@@ -11,6 +11,8 @@ if len(sys.argv) > 1:
 else:
     input_stream = InputStream(input('? '))
 
+print(type(input_stream))
+
 lexer = SkylineLexer(input_stream)
 token_stream = CommonTokenStream(lexer)
 parser = SkylineParser(token_stream)

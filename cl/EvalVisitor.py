@@ -1,17 +1,24 @@
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .SkylineParser import SkylineParser
-    from .SkylineVisitor import SkylineVisitor
 else:
     from SkylineParser import SkylineParser
-    from SkylineVisitor import SkylineVisitor
 
 from skyline import Skyline
 
-class EvalVisitor(SkylineVisitor):
+class EvalVisitor(ParseTreeVisitor):
 
     def __init__(self):
         self.taula_simbols = {}
+
+    # Visit a parse tree produced by SkylineParser#root.
+    def visitRoot(self, ctx:SkylineParser.RootContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SkylineParser#instruccio.
+    def visitInstruccio(self, ctx:SkylineParser.InstruccioContext):
+        return self.visitChildren(ctx)
 
     # Visit a parse tree produced by SkylineParser#assig.
     def visitAssig(self, ctx:SkylineParser.AssigContext):
@@ -37,6 +44,7 @@ class EvalVisitor(SkylineVisitor):
 
             elif l[1].getSymbol().type == SkylineParser.MES:
                 sk = self.visit(l[0]) + self.visit(l[2])
+                print("Hola")
                 sk.mostra()
                 return sk
 
