@@ -35,27 +35,18 @@ class EvalVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx:SkylineParser.ExprContext):
         if ctx.getChildCount() == 1:
-            print("un")
             return self.visit(ctx.simbol())
 
-            # if next(ctx.getChildren()) == ctx.edifici():
-            #     return self.visit(ctx.edifici())
-            # else:
-            #     return self.visit(ctx.simbol())
-
         elif ctx.getChildCount() == 2:
-            print("dos")
             return - self.visit(ctx.simbol())
 
         elif ctx.getChildCount() == 3:
-            print("tres")
             g = ctx.getChildren()
             l = [next(g) for i in range(3)]
 
             if isinstance(l[0], tree.Tree.TerminalNode):
-                print("Parèntesis")
                 return self.visit(l[1])
-                
+
             elif l[1].getSymbol().type == SkylineParser.PER:
                 sk = self.visit(l[0]) * self.visit(l[2])
                 return sk
@@ -84,3 +75,6 @@ class EvalVisitor(ParseTreeVisitor):
         g = ctx.getChildren()
         l = [next(g).getText() for i in range(ctx.getChildCount())]
         return Skyline(int(l[1]), int(l[3]), int(l[5]))
+
+
+# if next(ctx.getChildren()) == ctx.edifici():
