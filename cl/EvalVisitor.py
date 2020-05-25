@@ -20,14 +20,17 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#instruccio.
     def visitInstruccio(self, ctx:SkylineParser.InstruccioContext):
-        r = self.visit(next(ctx.getChildren()))
-        print("Inst: ", type(r))
-        return r
+        if next(ctx.getChildren()) == ctx.assig():
+            return self.visit(next(ctx.getChildren()))
+        else:
+            return (None, self.visit(next(ctx.getChildren())))
 
     # Visit a parse tree produced by SkylineParser#assig.
     def visitAssig(self, ctx:SkylineParser.AssigContext):
         print("Flag1")
-        self.taula_simbols[ctx.VAR().getText()] = self.visit(ctx.expr())
+        res = self.visit(ctx.expr())
+        self.taula_simbols[ctx.VAR().getText()] = res
+        return (ctx.VAR().getText(), res)
 
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx:SkylineParser.ExprContext):

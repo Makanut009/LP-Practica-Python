@@ -48,16 +48,19 @@ def counter(update, context):
         chat_id=update.effective_chat.id,
         text=str(context.user_data['counter']))
 
+
+visitor = EvalVisitor()
+
 def aux(update, context):
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
     tree = parser.root()
-    visitor = EvalVisitor()
+    #visitor = EvalVisitor()
     sk = Skyline()
-    sk = visitor.visit(tree)
-    print("Holaa")
+    (var, sk) = visitor.visit(tree)
+    print("VaR: ", var)
     
     try:
         sk.mostra()
