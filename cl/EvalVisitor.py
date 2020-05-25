@@ -13,20 +13,24 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#root.
     def visitRoot(self, ctx:SkylineParser.RootContext):
-        return self.visitChildren(ctx)
+        r = self.visit(next(ctx.getChildren()))
+        print("Root: ", type(r))
+        return r
 
 
     # Visit a parse tree produced by SkylineParser#instruccio.
     def visitInstruccio(self, ctx:SkylineParser.InstruccioContext):
-        return self.visitChildren(ctx)
+        r = self.visit(next(ctx.getChildren()))
+        print("Inst: ", type(r))
+        return r
 
     # Visit a parse tree produced by SkylineParser#assig.
     def visitAssig(self, ctx:SkylineParser.AssigContext):
+        print("Flag1")
         self.taula_simbols[ctx.VAR().getText()] = self.visit(ctx.expr())
 
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx:SkylineParser.ExprContext):
-        print(ctx.getChildCount())
         if ctx.getChildCount() == 1:
             if next(ctx.getChildren()) == ctx.edifici():
                 return self.visit(ctx.edifici())
@@ -39,13 +43,12 @@ class EvalVisitor(ParseTreeVisitor):
 
             if l[1].getSymbol().type == SkylineParser.PER:
                 sk = self.visit(l[0]) * self.visit(l[2])
-                sk.mostra()
+                print("Expr: ", type(sk))
                 return sk
 
             elif l[1].getSymbol().type == SkylineParser.MES:
                 sk = self.visit(l[0]) + self.visit(l[2])
-                print("Hola")
-                sk.mostra()
+                print("Expr: ", type(sk))
                 return sk
 
             elif l[1].getSymbol().type == SkylineParser.MENYS:
@@ -56,10 +59,12 @@ class EvalVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by SkylineParser#edifici.
     def visitEdifici(self, ctx:SkylineParser.EdificiContext):
         g = ctx.getChildren()
+        print("Flagg")
         l = [next(g).getText() for i in range(ctx.getChildCount())]
         return Skyline(int(l[1]), int(l[3]), int(l[5]))
 
     # Visit a parse tree produced by SkylineParser#simbol.
     def visitSimbol(self, ctx:SkylineParser.SimbolContext):
         isVar = ctx.VAR() is not None
+        print("Flagggggggggggg1")
         return self.taula_simbols[ctx.getText()] if isVar else int(ctx.getText())

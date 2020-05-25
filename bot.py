@@ -55,7 +55,17 @@ def aux(update, context):
     parser = SkylineParser(token_stream)
     tree = parser.root()
     visitor = EvalVisitor()
-    visitor.visit(tree)
+    sk = Skyline()
+    sk = visitor.visit(tree)
+    print("Holaa")
+    
+    try:
+        sk.mostra()
+    except Exception as err:
+        traceback.print_tb(err.__traceback__)
+        print(traceback.format_exc())
+        # or
+        print(sys.exc_info())
 
 # declara una constant amb el access token que llegeix de token.txt
 TOKEN = open('token.txt').read().strip()
