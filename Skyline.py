@@ -123,33 +123,27 @@ class Skyline:
     #     return resultat
 
 
-    def interseccio(self, skyline):
-        resultat = self
-        for e in skyline.edificis:
-            resultat = resultat.intersecar_edifici(e)
-        return resultat
+    # def interseccio(self, skyline):
+    #     resultat = self
+    #     for e in skyline.edificis:
+    #         resultat = resultat.intersecar_edifici(e)
+    #     return resultat
 
 
     def unio(self, sky2):
 
         ed1 = self.edificis
         ed2 = sky2.edificis
+        res = []
+        it1 = it2 = 0
+        ult_h1 = ult_h2 = 0
 
         print("Ed1: ", ed1)
         print("Ed2: ", ed2)
 
-        res = []
-
-        it1 = it2 = 0
-
-        ult_h1 = 0
-        ult_h2 = 0
-
         while it1 != len(ed1) and it2 != len(ed2):
             (x1, h1) = ed1[it1]
-            (x2, h2) = ed2[it2]        
-
-            #ult_h = res[-1][1] if res else -1
+            (x2, h2) = ed2[it2]
 
             if x1 == x2:
                 res.append((x1, max(h1, h2)))
@@ -182,17 +176,6 @@ class Skyline:
                 ult_h2 = h2
                 it2 += 1
 
-            #     ult_h1 = h1
-            #     if h1 > ult_h2:
-            #         res.append((x1, h1))
-            #     it1 += 1
-
-            # else:
-            #     if h2 != ult_h:
-            #         res.append((x2, h2))
-            #         ult_h2 = h2
-            #     it2 += 1
-
         if it1 == len(ed1) and it2 != len(ed2):
             res += ed2[it2:]
         elif it2 == len(ed2) and it1 != len(ed1):
@@ -206,6 +189,92 @@ class Skyline:
         print("Res: ", res)
 
         return nou_sky
+
+
+    def interseccio(self, sky2):
+
+        ed1 = self.edificis
+        ed2 = sky2.edificis
+
+        print("Ed1: ", ed1)
+        print("Ed2: ", ed2)     
+
+        #ed1 = [ed for ed in ed1 if ed[0] >= xmin and ed[0] <= xmax]
+        #ed2 = [ed for ed in ed2 if ed[0] >= xmin and ed[0] <= xmax]
+
+        it1 = it2 = 0
+        ult_h1 = ult_h2 = 0
+        res = []
+
+        xmin = max(ed1[0][0], ed2[0][0])
+        xmax = min(ed1[-1][0], ed2[-1][0])
+
+        print(xmin, xmax)
+
+        if xmin < xmax: #els skylines intersequen en algun punt
+            while it1 != len(ed1) and it2 != len(ed2):
+                (x1, h1) = ed1[it1]
+                (x2, h2) = ed2[it2]
+
+                if x1 == x2:
+                    res.append((x1, min(h1, h2)))
+                    #ult_h1 = h1
+                    #ult_h2 = h2
+                    it1 += 1
+                    it2 += 1
+
+                elif x1 < x2:
+                    if h1 > ult_h1:
+                        if h1 < ult_h2:
+                            res.append((x1, h1))
+                    else:
+                        if h1 < ult_h2:
+                            res.append((x1,h1))
+                    ult_h1 = h1
+                    it1 += 1
+
+                else:
+                    if h2 > ult_h2:
+                        if h2 < ult_h1:
+                            res.append((x2, h2))
+                        else:
+                            res.append((x2, ult_h1))
+                    else:
+                        if h2 < ult_h1:
+                            res.append((x2,h2))
+                    ult_h2 = h2
+                    it2 += 1
+
+        nou_sky = Skyline()
+        nou_sky.edificis = res
+
+        print("Res: ", res)
+
+        return nou_sky
+
+            # while it1 != len(ed1)-1 and it2 != len(ed2)-1:
+            #     (in1, h1) = ed1[it1]
+            #     fi1 = ed1[it+1][0]
+            #     (in2, h2) = ed2[it2]
+            #     fi2 = ed2[it2+1][0]
+
+            #     # if fi1 < xmin or in1 > xmax: #ed1 fora de la interseccio d'skylines
+            #     #     it1 += 1
+            #     # elif fi2 < xmin or in2 > xmax: #ed2 fora de la interseccio d'skylines
+            #     #     it2 += 1
+
+            #     if fi1 > in2 or fi2 > in2: #els edificis intersequen en algun punt
+
+            #         if <
+            #         esq = max(e[0], xmin)
+            #         dreta = min(e[2], xmax)
+            #         res += [(esq, alt, dreta)] if alt <= e[1] else [(esq, e[1], dreta)]
+            #     else:
+            #         if in1 < in2:
+            #             it1 += 1
+            #         else:
+            #             it2 += 1
+
 
 
     def intersecar_edifici(self, edifici):
@@ -269,7 +338,7 @@ class Skyline:
 
 def main():
     sk1 = Skyline(1,2,3)
-    sk2 = Skyline(5,3,7)
+    sk2 = Skyline(2,3,4)
     sk3 = Skyline(2,1,6)
     sk4 = Skyline(9,1,12)
     sk5 = Skyline(-3,1,-2)
@@ -277,6 +346,7 @@ def main():
     sk1 = sk1.unio(sk3)
     sk1 = sk1.unio(sk4)
     sk1 = sk1.unio(sk5)
+    sk1 = sk1.interseccio(Skyline(3,2,5))
     sk1.mostra()
     print(sk1.area())
     print(sk1.alcada())
