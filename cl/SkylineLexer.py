@@ -1,4 +1,4 @@
-# Generated from Skyline.g by ANTLR 4.7.1
+# Generated from Skyline.g4 by ANTLR 4.7.1
 from antlr4 import *
 from io import StringIO
 from typing.io import TextIO
@@ -70,7 +70,7 @@ class SkylineLexer(Lexer):
     ruleNames = [ "T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "LPAREN", 
                   "RPAREN", "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
 
-    grammarFileName = "Skyline.g"
+    grammarFileName = "Skyline.g4"
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
         super().__init__(input, output)
