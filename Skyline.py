@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import random
+import time
 
 class Skyline:
 
@@ -284,14 +285,19 @@ class Skyline:
 
 
 def main():
-    sk0 = Skyline()
-    sk0.mostra()
-    sk1 = Skyline(1,2,3)
-    sk1.mostra()
-    sk2 = Skyline([(1, 2, 3), (3, 4, 6)])
-    sk2.mostra()
-    sk3 = Skyline(30,10,5,0,50)
+    # sk0 = Skyline()
+    # sk0.mostra()
+    # sk1 = Skyline(1,2,3)
+    # sk1.mostra()
+    # sk2 = Skyline([(1, 2, 3), (3, 4, 6)])
+    # sk2.mostra()
+    start = time.time()
+    sk3 = Skyline(100000,20,3,1,10000)
+    end = time.time()
     sk3.mostra()
+    end2 = time.time()
+    print(end - start)
+    print(end2 - start)
 
     #sk1 = Skyline(1,2,3)
     # sk2 = Skyline(2,3,4)
