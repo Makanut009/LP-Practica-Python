@@ -72,35 +72,30 @@ class EvalVisitor(ParseTreeVisitor):
         elif ctx.NUM() is not None:
             return int(ctx.getText())
         else:
-            return self.visit(ctx.edifici())
+            edifici = self.visit(ctx.edifici())
+            return Skyline(edifici[0], edifici[1], edifici[2])
 
 
     # Visit a parse tree produced by SkylineParser#edifici.
     def visitEdifici(self, ctx:SkylineParser.EdificiContext):
         g = ctx.getChildren()
         l = [next(g).getText() for i in range(ctx.getChildCount())]
-        return Skyline(int(l[1]), int(l[3]), int(l[5]))
+        return (int(l[1]), int(l[3]), int(l[5]))
 
 
     # Visit a parse tree produced by SkylineParser#compost.
     def visitCompost(self, ctx:SkylineParser.CompostContext):
-        sk = Skyline()
         g = ctx.getChildren()
+        edificis = []
         for i in range(ctx.getChildCount()):
             ch = next(g)
             if not isinstance(ch, tree.Tree.TerminalNode):
-                sk = sk.unio(self.visit(ch))
-        return sk
+                edificis += [self.visit(ch)]
+        return Skyline(edificis)
 
 
     # Visit a parse tree produced by SkylineParser#random.
     def visitRandom(self, ctx:SkylineParser.RandomContext):
         g = ctx.getChildren()
         l = [next(g).getText() for i in range(ctx.getChildCount())]
-        sk = Skyline()
-        sk = sk.random(int(l[1]), int(l[3]), int(l[5]), int(l[7]), int(l[9]))
-        print(len( sk.edificis))
-        return sk
-
-
-# if next(ctx.getChildren()) == ctx.edifici():
+        return Skyline(int(l[1]), int(l[3]), int(l[5]), int(l[7]), int(l[9]))
