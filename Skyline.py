@@ -7,7 +7,7 @@ class Skyline:
         if xmin == None:
             self.edificis = []
         else:
-            self.edificis = [(xmin, alt, xmax)]
+            self.edificis = [(xmin, alt), (xmax, 0)]
 
     # def __repr__(self):
     #     return self.__str__()
@@ -91,27 +91,36 @@ class Skyline:
     def __str__(self):
         return str(self.edificis)
         
+    # def mostra(self):
+    #     xs = [e[0] for e in self.edificis]
+    #     hs = [e[1] for e in self.edificis]
+        
+    #     plt.bar(xs, hs, width=1, align='edge', color=['red'])
+    #     plt.show()
+    #     plt.close()
+
     def mostra(self):
         xs = []
-        alts = []
-        for e in self.edificis:
-            xs += [i for i in range(e[0], e[2])]
-            n = (e[2] - e[0])
-            alts += [e[1]]*n
+        hs = []
+        for i in range(len(self.edificis)-1):
+            dif = self.edificis[i+1][0] - self.edificis[i][0]
+            xs += [self.edificis[i][0]+k for k in range(dif)]
+            hs += [self.edificis[i][1]] * dif
+
+        #print(xs, hs)
         
-        plt.bar(xs, alts, width=1, align='edge', color=['red'])
+        plt.bar(xs, hs, width=1, align='edge', color=['red'])
         plt.show()
         plt.close()
 
-
-    def unio(self, skyline):
-        resultat = self
-        if not resultat.edificis:
-            resultat.edificis = skyline.edificis
-        else:
-            for e in skyline.edificis:
-                resultat = resultat.unir_edifici(e)
-        return resultat
+    # def unio(self, skyline):
+    #     resultat = self
+    #     if not resultat.edificis:
+    #         resultat.edificis = skyline.edificis
+    #     else:
+    #         for e in skyline.edificis:
+    #             resultat = resultat.unir_edifici(e)
+    #     return resultat
 
 
     def interseccio(self, skyline):
@@ -121,73 +130,81 @@ class Skyline:
         return resultat
 
 
-    def unir_edifici(self, edifici):
-        edificis = self.edificis
-        nou_sky = Skyline()
+    def unio(self, sky2):
+
+        ed1 = self.edificis
+        ed2 = sky2.edificis
+
+        print("Ed1: ", ed1)
+        print("Ed2: ", ed2)
+
         res = []
 
-        xmin, alt, xmax = edifici[0], edifici[1], edifici[2]
-        edifici_esq = edificis[0]
-        sky_min, alt_sky_min, = edifici_esq[0], edifici_esq[1]
-        edifici_dreta = edificis[len(edificis)-1]
-        sky_max, alt_sky_max = edifici_dreta[2], edifici_dreta[1]
+        it1 = it2 = 0
 
-        
-        if xmax < sky_min: # Està fora de l'skyline, a l'esquerra
-            res = [edifici] + [(xmax, 0, sky_min)] + [edificis]
-        elif xmin > sky_max: # Està fora de l'skyline, a la dreta
-            res = [edificis] + [(sky_xmax, 0, xmin)] + [edifici]
-        else:
+        ult_h1 = 0
+        ult_h2 = 0
 
-            if xmin < sky_min:
-                print("Sobresurt per l'esquerra")
-                if alt == alt_sky_min:
-                    res += [(xmin, alt, sky_xmin)]
+        while it1 != len(ed1) and it2 != len(ed2):
+            (x1, h1) = ed1[it1]
+            (x2, h2) = ed2[it2]        
 
-            for e in edificis: #VIGILAR QUÈ FEM AMB ELS =
-                if alt > e[1]:
-                    if xmin < e[0]:
-                        if xmax > e[0]:
-                            if xmax < e[2]:
-                                ed_nou = (e[0], alt, xmax)
-                                ed_dret = (xmax, e[1], e[2])
-                                res += [ed_nou, ed_dret]
-                            else:
-                                ed_nou = (e[0], alt, e[2])
-                                res.append(ed_nou)
-                        else:
-                            res.append(e)
+            #ult_h = res[-1][1] if res else -1
 
-                    elif xmin == e[0]:
-                        if xmax >= e[2]:
-                            ed_nou = (xmin, alt, e[2])
-                            res += [ed_nou]
-                        else:
-                            ed_nou = (xmin, alt, xmax)
-                            ed_dret = (xmax, e[1], e[2])
-                            res += [ed_nou, ed_dret]
+            if x1 == x2:
+                res.append((x1, max(h1, h2)))
+                ult_h1 = h1
+                ult_h2 = h2
+                it1 += 1
+                it2 += 1
 
-                    else:
-                        if xmin < e[2]:
-                            if xmax > e[2]:
-                                ed_esq = (e[0], e[1], xmin)
-                                ed_nou = (xmin, alt, e[2])
-                                res += [ed_esq, ed_nou]
-                            else:
-                                ed_esq = (e[0], e[1], xmin)
-                                ed_nou = (xmin, alt, xmax)
-                                ed_dret = (xmax, e[1], e[2])
-                                res += [ed_esq, ed_nou, ed_dret]
-                        else:
-                            res.append(e)
+            elif x1 < x2:
+                if h1 > ult_h1:
+                    if h1 > ult_h2:
+                        res.append((x1, h1))
                 else:
-                    res.append(e)
+                    if h1 > ult_h2:
+                        res.append((x1,h1))
+                    elif ult_h1 > ult_h2:
+                        res.append((x1, ult_h2))
+                ult_h1 = h1
+                it1 += 1
 
-            if xmax > sky_xmax:
-                print("Sobresurt per la dreta")
-                res += [(sky_xmax, alt, xmax)]
+            else:
+                if h2 > ult_h2:
+                    if h2 > ult_h1:
+                        res.append((x2, h2))
+                else:
+                    if h2 > ult_h1:
+                        res.append((x2,h2))
+                    elif ult_h2 > ult_h1:
+                        res.append((x2, ult_h1))
+                ult_h2 = h2
+                it2 += 1
 
+            #     ult_h1 = h1
+            #     if h1 > ult_h2:
+            #         res.append((x1, h1))
+            #     it1 += 1
+
+            # else:
+            #     if h2 != ult_h:
+            #         res.append((x2, h2))
+            #         ult_h2 = h2
+            #     it2 += 1
+
+        if it1 == len(ed1) and it2 != len(ed2):
+            res += ed2[it2:]
+        elif it2 == len(ed2) and it1 != len(ed1):
+            res += ed1[it1:]
+
+        res[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
+
+        nou_sky = Skyline()
         nou_sky.edificis = res
+
+        print("Res: ", res)
+
         return nou_sky
 
 
@@ -241,27 +258,28 @@ class Skyline:
 
 
     def area(self):
-        return sum([(e[2]-e[0])*e[1] for e in self.edificis])
+        area = 0
+        for i in range(len(self.edificis)-1):
+            area += (self.edificis[i+1][0] - self.edificis[i][0]) * self.edificis[i][1] 
+        return area
 
     def alcada(self):
         return max([e[1] for e in self.edificis])
 
 
 def main():
-    sk1 = Skyline(1, 2, 3)
-    sk1 = sk1.unir_edifici((2,3,4))
-    sk1 = sk1.unir_edifici((7,2,9))
-    #sk1.mostra()
-    #sk1-4
+    sk1 = Skyline(1,2,3)
+    sk2 = Skyline(5,3,7)
+    sk3 = Skyline(2,1,6)
+    sk4 = Skyline(9,1,12)
+    sk5 = Skyline(-3,1,-2)
+    sk1 = sk1.unio(sk2)
+    sk1 = sk1.unio(sk3)
+    sk1 = sk1.unio(sk4)
+    sk1 = sk1.unio(sk5)
     sk1.mostra()
     print(sk1.area())
     print(sk1.alcada())
-    
-
-    # if isinstance(a, list):
-    #     self.edificis = [a[0]]
-    #     for e in range(1, len(a)):
-    #         self.edificis += self.unir_edifici(e)
 
 
 if __name__ == "__main__":
