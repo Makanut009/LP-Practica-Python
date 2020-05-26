@@ -3,11 +3,17 @@ import matplotlib.pyplot as plt
 import random
 
 class Skyline:
-    def __init__(self, xmin = None, alt = None, xmax = None):
-        if xmin == None:
+
+    def __init__(self, arg1 = None, arg2 = None, arg3 = None):
+        if arg1 == None:
             self.edificis = []
+        elif type(arg1) == int:
+            self.edificis = [(arg1, arg2), (arg3, 0)]
         else:
-            self.edificis = [(xmin, alt), (xmax, 0)]
+            print("Miau")
+            for e in arg1:
+                self = self.unio(Skyline(e[0], e[1], e[2]))
+            print(self.edificis)
 
     def random(self, n, h, w, xmin, xmax):
         if n < 1:
@@ -113,6 +119,17 @@ class Skyline:
         ed1 = self.edificis
         ed2 = sky2.edificis
         res = []
+
+        if not ed1:
+            nou_sky = Skyline()
+            nou_sky.edificis = ed2
+            return nou_sky
+
+        if not ed2:
+            nou_sky = Skyline()
+            nou_sky.edificis = ed1
+            return nou_sky
+
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0
 
@@ -161,6 +178,8 @@ class Skyline:
 
         res[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
 
+        print("Res: ", res)
+
         nou_sky = Skyline()
         nou_sky.edificis = res
         return nou_sky
@@ -170,6 +189,9 @@ class Skyline:
 
         ed1 = self.edificis
         ed2 = sky2.edificis
+
+        if not ed1 or not ed2:
+            return Skyline()
 
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0
@@ -262,18 +284,21 @@ class Skyline:
 
 
 def main():
-    sk1 = Skyline(1,2,3)
-    sk2 = Skyline(2,3,4)
-    sk3 = Skyline(2,1,6)
-    sk4 = Skyline(9,1,12)
-    sk5 = Skyline(-3,1,-2)
-    sk1 = sk1.unio(sk2)
-    sk1 = sk1.unio(sk3)
-    sk1 = sk1.unio(sk4)
-    sk1 = sk1.unio(sk5)
-    sk1.mostra()
-    sk1 = sk1.desp_esq(3)
-    sk1.mostra()
+    #sk0 = Skyline()s
+    sk2 = Skyline(1,2,3)
+    sk0 = Skyline([(1, 2, 3), (3, 4, 6)])
+    #sk1 = Skyline(1,2,3)
+    # sk2 = Skyline(2,3,4)
+    # sk3 = Skyline(2,1,6)
+    # sk4 = Skyline(9,1,12)
+    # sk5 = Skyline(-3,1,-2)
+    # sk1 = sk1.unio(sk2)
+    # sk1 = sk1.unio(sk3)
+    # sk1 = sk1.unio(sk4)
+    # sk1 = sk1.unio(sk5)
+    #sk1 = sk0.interseccio(sk1)
+    sk0.mostra()
+    sk2.mostra()
     # print(sk1.area())
     # print(sk1.alcada())
 
