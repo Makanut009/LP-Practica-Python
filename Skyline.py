@@ -234,17 +234,21 @@ class Skyline:
 
 
     def desp_dreta(self, N): #Es podria fer amb map?
-        sky_nou = Skyline()
+        res = []
         for e in self.edificis:
-            sky_nou.edificis.append((e[0]+N, e[1], e[2]+N))
-        return sky_nou
+            res.append((e[0]+N, e[1]))
+        nou_sky = Skyline()
+        nou_sky.edificis = res
+        return nou_sky
 
 
     def desp_esq(self, N): #Es podria fer amb map?
-        sky_nou = Skyline()
+        res = []
         for e in self.edificis:
-            sky_nou.edificis.append((e[0]-N, e[1], e[2]-N))
-        return sky_nou
+            res.append((e[0]-N, e[1]))
+        nou_sky = Skyline()
+        nou_sky.edificis = res
+        return nou_sky
 
 
     def area(self):
@@ -268,7 +272,7 @@ def main():
     sk1 = sk1.unio(sk4)
     sk1 = sk1.unio(sk5)
     sk1.mostra()
-    sk1 = sk1.replica_skyline(3)
+    sk1 = sk1.desp_esq(3)
     sk1.mostra()
     # print(sk1.area())
     # print(sk1.alcada())
