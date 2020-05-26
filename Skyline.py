@@ -103,10 +103,8 @@ class Skyline:
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
         xs = [-e[0]+esq+dreta for e in self.edificis]
         xs.reverse()
-        hs = [e[1] for e in self.edificis]
-        hs = hs[:-1]
+        hs = [0] + [e[1] for e in self.edificis[:-1]]
         hs.reverse()
-        hs.append(0)
         edificis = list(zip(xs, hs))
         sk = Skyline()
         sk.edificis = edificis
