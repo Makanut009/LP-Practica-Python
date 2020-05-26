@@ -217,19 +217,20 @@ class Skyline:
         return nou_sky
 
 
-    def replica_skyline(self, N): #Es podria fer amb map?
-        print(self.edificis)
-        sky_nou = Skyline()
-        edificis = self.edificis
-        esq = min([edificis[i][0] for i in range(len(edificis))])
-        dreta = max([edificis[i][2] for i in range(len(edificis))])
-        mida = dreta - esq
+    def replica_skyline(self, N):
+        
+        xmin = self.edificis[0][0]
+        xmax = self.edificis[-1][0]
+        mida = xmax - xmin
+        res = []
 
         for i in range(0, N):
-            for e in edificis:
-                print(i)
-                sky_nou.edificis.append((e[0]+mida*i, e[1], e[2]+mida*i))
-        return sky_nou
+            for e in self.edificis:
+                res.append((e[0]+mida*i, e[1]))
+
+        nou_sky = Skyline()
+        nou_sky.edificis = res
+        return nou_sky
 
 
     def desp_dreta(self, N): #Es podria fer amb map?
@@ -266,10 +267,11 @@ def main():
     sk1 = sk1.unio(sk3)
     sk1 = sk1.unio(sk4)
     sk1 = sk1.unio(sk5)
-    sk1 = sk1.interseccio(Skyline(3,2,5))
     sk1.mostra()
-    print(sk1.area())
-    print(sk1.alcada())
+    sk1 = sk1.replica_skyline(3)
+    sk1.mostra()
+    # print(sk1.area())
+    # print(sk1.alcada())
 
 
 if __name__ == "__main__":
