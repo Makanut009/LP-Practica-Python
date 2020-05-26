@@ -9,7 +9,7 @@ class Skyline:
         if not args:
             self.edificis = []
 
-        elif len(args) == 1:        #Creació normal
+        elif len(args) == 1:        #Creació composta
             self.edificis = []
             for e in args[0]:
                 sk = Skyline(e[0], e[1], e[2])
@@ -25,7 +25,6 @@ class Skyline:
             print("Nombre de paràmetres incorrectes a l'hora de crear l'Skyline")
             
             
-
     def random(self, n, h, w, xmin, xmax):
         if n < 1:
             raise Exception
