@@ -115,29 +115,36 @@ def genera_grafic(sk):
     plt.close()
 
 
-visitor = EvalVisitor()
+#visitor = EvalVisitor()
 
 def aux(update, context):
+    
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
     tree = parser.root()
     #visitor = EvalVisitor()
+
+    if 'visitor' not in context.user_data:
+        context.user_data['visitor'] = EvalVisitor()
     
     try:
-        (var, sk) = visitor.visit(tree)
+        (var, sk) = context.user_data['visitor'].visit(tree)
     except KeyError:
         context.bot.send_message(
             chat_id = update.effective_chat.id,
             text = "Aquest identificador no existeix")
+        raise Exception
     except TypeError:
         context.bot.send_message(
             chat_id = update.effective_chat.id,
             text = "Error de tipus: operació no suportada")
+        raise Exception
     except Exception as err:
         print(traceback.format_exc())
         print(sys.exc_info())
+        raise Exception
 
     # print("Var: ", var)
     # print("Nombre d'edificis: ", len(sk.edificis))
