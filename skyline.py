@@ -127,59 +127,64 @@ class Skyline:
         res = []
 
         xmin, alt, xmax = edifici[0], edifici[1], edifici[2]
-        sky_xmin, sky_xmax = edificis[0][0], edificis[len(edificis)-1][2]
+        edifici_esq = edificis[0]
+        sky_min, alt_sky_min, = edifici_esq[0], edifici_esq[1]
+        edifici_dreta = edificis[len(edificis)-1]
+        sky_max, alt_sky_max = edifici_dreta[2], edifici_dreta[1]
 
-        if xmin < sky_xmin:
-            print("Sobresurt per l'esquerra")
-            if xmax < sky_xmin:
-                res = [edifici] + [(xmax, 0, sky_xmin)]
-            else:
-                res = [(xmin, alt, sky_xmin)]
+        
+        if xmax < sky_min: # Està fora de l'skyline, a l'esquerra
+            res = [edifici] + [(xmax, 0, sky_min)] + [edificis]
+        elif xmin > sky_max: # Està fora de l'skyline, a la dreta
+            res = [edificis] + [(sky_xmax, 0, xmin)] + [edifici]
+        else:
 
-        for e in edificis: #VIGILAR QUÈ FEM AMB ELS =
-            if alt > e[1]:
-                if xmin < e[0]:
-                    if xmax > e[0]:
-                        if xmax < e[2]:
-                            ed_nou = (e[0], alt, xmax)
-                            ed_dret = (xmax, e[1], e[2])
-                            res += [ed_nou, ed_dret]
+            if xmin < sky_min:
+                print("Sobresurt per l'esquerra")
+                if alt == alt_sky_min:
+                    res += [(xmin, alt, sky_xmin)]
+
+            for e in edificis: #VIGILAR QUÈ FEM AMB ELS =
+                if alt > e[1]:
+                    if xmin < e[0]:
+                        if xmax > e[0]:
+                            if xmax < e[2]:
+                                ed_nou = (e[0], alt, xmax)
+                                ed_dret = (xmax, e[1], e[2])
+                                res += [ed_nou, ed_dret]
+                            else:
+                                ed_nou = (e[0], alt, e[2])
+                                res.append(ed_nou)
                         else:
-                            ed_nou = (e[0], alt, e[2])
-                            res.append(ed_nou)
-                    else:
-                        res.append(e)
+                            res.append(e)
 
-                elif xmin == e[0]:
-                    if xmax >= e[2]:
-                        ed_nou = (xmin, alt, e[2])
-                        res += [ed_nou]
-                    else:
-                        ed_nou = (xmin, alt, xmax)
-                        ed_dret = (xmax, e[1], e[2])
-                        res += [ed_nou, ed_dret]
-
-                else:
-                    if xmin < e[2]:
-                        if xmax > e[2]:
-                            ed_esq = (e[0], e[1], xmin)
+                    elif xmin == e[0]:
+                        if xmax >= e[2]:
                             ed_nou = (xmin, alt, e[2])
-                            res += [ed_esq, ed_nou]
+                            res += [ed_nou]
                         else:
-                            ed_esq = (e[0], e[1], xmin)
                             ed_nou = (xmin, alt, xmax)
                             ed_dret = (xmax, e[1], e[2])
-                            res += [ed_esq, ed_nou, ed_dret]
-                    else:
-                        res.append(e)
-            else:
-                res.append(e)
+                            res += [ed_nou, ed_dret]
 
-        if xmax > sky_xmax:
-            print("Sobresurt per la dreta")
-            if xmin > sky_xmax:
-                res += [(sky_xmax, 0, xmin)] + [edifici]
-            else:
+                    else:
+                        if xmin < e[2]:
+                            if xmax > e[2]:
+                                ed_esq = (e[0], e[1], xmin)
+                                ed_nou = (xmin, alt, e[2])
+                                res += [ed_esq, ed_nou]
+                            else:
+                                ed_esq = (e[0], e[1], xmin)
+                                ed_nou = (xmin, alt, xmax)
+                                ed_dret = (xmax, e[1], e[2])
+                                res += [ed_esq, ed_nou, ed_dret]
+                        else:
+                            res.append(e)
+                else:
+                    res.append(e)
+
+            if xmax > sky_xmax:
+                print("Sobresurt per la dreta")
                 res += [(sky_xmax, alt, xmax)]
 
         nou_sky.edificis = res
