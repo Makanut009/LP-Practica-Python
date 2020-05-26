@@ -4,16 +4,27 @@ import random
 
 class Skyline:
 
-    def __init__(self, arg1 = None, arg2 = None, arg3 = None):
-        if arg1 == None:
+    def __init__(self, *args):
+
+        if not args:
             self.edificis = []
-        elif type(arg1) == int:
-            self.edificis = [(arg1, arg2), (arg3, 0)]
+
+        elif len(args) == 1:        #Creació normal
+            self.edificis = []
+            for e in args[0]:
+                sk = Skyline(e[0], e[1], e[2])
+                self.edificis = self.unio(sk).edificis.copy()
+                
+        elif len(args) == 3:        #Creació normal
+            self.edificis = [(args[0], args[1]), (args[2], 0)]
+
+        elif len(args) == 5:        #Creació aleatòria
+            self.random(args[0], args[1], args[2], args[3], args[4])
+
         else:
-            print("Miau")
-            for e in arg1:
-                self = self.unio(Skyline(e[0], e[1], e[2]))
-            print(self.edificis)
+            print("Nombre de paràmetres incorrectes a l'hora de crear l'Skyline")
+            
+            
 
     def random(self, n, h, w, xmin, xmax):
         if n < 1:
@@ -25,7 +36,7 @@ class Skyline:
         if xmax <= xmin:
             raise Exception
 
-        edificis = []
+        skylines = []
 
         for i in range(n):
             alt = random.randint(0,h)
@@ -33,21 +44,16 @@ class Skyline:
             while esq + ampl > xmax:
                 esq = random.randint(xmin, xmax)
                 ampl = random.randint(1,min(w, xmax-xmin))
-                dreta = esq + ampl                
-            edificis += [(esq, alt, esq+w)]
+                dreta = esq + ampl
+            skylines += [Skyline(esq, alt, esq+w)]
 
-        i=0
-        print(len(edificis))
-        for e in edificis:
-            #print(i)
+
+        self.edificis = []
+        for sk in skylines:
             if not self.edificis:
-                self.edificis = [e]
+                self.edificis = sk.edificis
             else:
-                self = self.unir_edifici(e)
-            i+=1
-
-        print(len(self.edificis))
-        return self
+                self.edificis = self.unio(sk).edificis
 
 
     def __mul__(self, other):
@@ -133,9 +139,6 @@ class Skyline:
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0
 
-        print("Ed1: ", ed1)
-        print("Ed2: ", ed2)
-
         while it1 != len(ed1) and it2 != len(ed2):
             (x1, h1) = ed1[it1]
             (x2, h2) = ed2[it2]
@@ -177,8 +180,6 @@ class Skyline:
             res += ed1[it1:]
 
         res[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
-
-        print("Res: ", res)
 
         nou_sky = Skyline()
         nou_sky.edificis = res
@@ -284,9 +285,15 @@ class Skyline:
 
 
 def main():
-    #sk0 = Skyline()s
-    sk2 = Skyline(1,2,3)
-    sk0 = Skyline([(1, 2, 3), (3, 4, 6)])
+    sk0 = Skyline()
+    sk0.mostra()
+    sk1 = Skyline(1,2,3)
+    sk1.mostra()
+    sk2 = Skyline([(1, 2, 3), (3, 4, 6)])
+    sk2.mostra()
+    sk3 = Skyline(30,10,5,0,50)
+    sk3.mostra()
+
     #sk1 = Skyline(1,2,3)
     # sk2 = Skyline(2,3,4)
     # sk3 = Skyline(2,1,6)
@@ -296,9 +303,7 @@ def main():
     # sk1 = sk1.unio(sk3)
     # sk1 = sk1.unio(sk4)
     # sk1 = sk1.unio(sk5)
-    #sk1 = sk0.interseccio(sk1)
-    sk0.mostra()
-    sk2.mostra()
+    #sk1 = sk0.interseccio(sk1)    
     # print(sk1.area())
     # print(sk1.alcada())
 
