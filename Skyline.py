@@ -100,7 +100,17 @@ class Skyline:
 
     def __neg__(self):
         print("Retorna l’skyline reflectit")
-        return Skyline(2,2,7)
+        esq, dreta = self.edificis[0][0], self.edificis[-1][0]
+        xs = [-e[0]+esq+dreta for e in self.edificis]
+        xs.reverse()
+        hs = [e[1] for e in self.edificis]
+        hs = hs[:-1]
+        hs.reverse()
+        hs.append(0)
+        edificis = list(zip(xs, hs))
+        sk = Skyline()
+        sk.edificis = edificis
+        return sk
 
 
     def __str__(self):
@@ -289,15 +299,17 @@ def main():
     # sk0.mostra()
     # sk1 = Skyline(1,2,3)
     # sk1.mostra()
-    # sk2 = Skyline([(1, 2, 3), (3, 4, 6)])
-    # sk2.mostra()
-    start = time.time()
-    sk3 = Skyline(100000,20,3,1,10000)
-    end = time.time()
+    sk2 = Skyline([(1, 2, 3), (3, 4, 6), (10,5,12)])
+    sk2.mostra()
+    sk3 = -sk2
     sk3.mostra()
-    end2 = time.time()
-    print(end - start)
-    print(end2 - start)
+    # start = time.time()
+    # sk3 = Skyline(100000,20,3,1,10000)
+    # end = time.time()
+    # sk3.mostra()
+    # end2 = time.time()
+    # print(end - start)
+    # print(end2 - start)
 
     #sk1 = Skyline(1,2,3)
     # sk2 = Skyline(2,3,4)
