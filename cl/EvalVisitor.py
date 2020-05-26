@@ -4,7 +4,7 @@ if __name__ is not None and "." in __name__:
 else:
     from SkylineParser import SkylineParser
 
-from skyline import Skyline
+from Skyline import Skyline
 
 class EvalVisitor(ParseTreeVisitor):
 

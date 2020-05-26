@@ -7,7 +7,7 @@ from cl.SkylineLexer import SkylineLexer
 from cl.SkylineParser import SkylineParser
 from cl.EvalVisitor import EvalVisitor
 
-from skyline import Skyline
+from Skyline import Skyline
 import matplotlib.pyplot as plt
 
 import traceback
