@@ -97,6 +97,23 @@ def write_pickle(obj: object, filename: str):
     with open(filename, "wb") as file:
         return pickle.dump(obj, file)
 
+def genera_grafic(sk):
+    xs = []
+    hs = []
+    ws = []
+    e1 = sk.edificis[0]
+    for i in range(1, len(sk.edificis)):
+        e2 = sk.edificis[i]
+        if e1[1] > 0:
+            xs.append(e1[0])
+            hs.append(e1[1])
+            ws.append(e2[0] - e1[0])
+        e1 = e2
+    
+    plt.bar(xs, hs, width=ws, align='edge', color=['red'])
+    plt.savefig('plot.png')
+    plt.close()
+
 
 visitor = EvalVisitor()
 
@@ -122,29 +139,15 @@ def aux(update, context):
         print(traceback.format_exc())
         print(sys.exc_info())
 
-    print("Var: ", var)
+    # print("Var: ", var)
+    # print("Nombre d'edificis: ", len(sk.edificis))
+    # print("Edificis: ", sk.edificis)
 
-    print(len(sk.edificis))
-    print(sk.edificis)
-
-    xs = []
-    alts = []
-    for e in sk.edificis:
-        xs += [i for i in range(e[0], e[2])]
-        n = (e[2] - e[0])
-        alts += [e[1]]*n
-
-    print(len(xs), len(alts))
-    
     try:
-        plt.bar(xs, alts, width=1, align='edge', color=['red'])
-        print("MAIAIAU")
-        plt.savefig('plot.png')
-        plt.close()
-    except Exception as err:
+        genera_grafic(sk)
+    except Exception:
         print(traceback.format_exc())
         print(sys.exc_info())
-    
 
     context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
     context.bot.send_message(chat_id = update.effective_chat.id, text = ("area: " + str(sk.area())))
