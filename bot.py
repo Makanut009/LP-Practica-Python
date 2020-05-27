@@ -74,41 +74,35 @@ def clean(update, context):
 
 def load(update, context):
     id = ' '.join(context.args)
-    sk = read_pickle(id + ".sky")
-    xs = []
-    alts = []
-    for e in sk.edificis:
-        xs += [i for i in range(e[0], e[2])]
-        n = (e[2] - e[0])
-        alts += [e[1]]*n
 
-    print(len(xs), len(alts))
-    
-    try:
-        plt.bar(xs, alts, width=1, align='edge', color=['red'])
-        print("MAIAIAU")
-        plt.savefig('plot.png')
-        plt.close()
-    except Exception as err:
-        print(traceback.format_exc())
-        print(sys.exc_info())
-    
+    sky = read_pickle(id + ".sky")
+    if 'visitor' not in context.user_data:
+        context.user_data['visitor'] = EvalVisitor()
+    context.user_data['visitor'].taula_simbols[id] = sky
     context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=id
-    )
+                chat_id = update.effective_chat.id,
+                text = "Skyline carregat")
 
 
 def save(update, context):
     id = ' '.join(context.args)
-    sky = Skyline(2,3,4)
-    nom = id + ".sky"
-    write_pickle(sky, nom)
-        
+
+    simbols = {}
+    if 'visitor' in context.user_data:
+        simbols = context.user_data['visitor'].taula_simbols
+        if id in simbols:
+            sky = simbols[id]
+            nom = id + ".sky"
+            write_pickle(sky, nom)
+            context.bot.send_message(
+                chat_id = update.effective_chat.id,
+                text = "Skyline guardat com a " + nom)
+            return
+
     context.bot.send_message(
         chat_id = update.effective_chat.id,
-        text = "Skyline guardat com a " + nom
-    )
+        text = "Aquest identificador no existeix")
+
 
 
 def read_pickle(filename: str):
