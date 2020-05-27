@@ -1,14 +1,17 @@
 # importa l'API de Telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import ParseMode
 
 import sys
 from antlr4 import *
 from cl.SkylineLexer import SkylineLexer
 from cl.SkylineParser import SkylineParser
 from cl.EvalVisitor import EvalVisitor
+from antlr4.error.ErrorListener import ErrorListener
 
 from Skyline import Skyline
 import matplotlib.pyplot as plt
+import pickle
 
 import traceback
 
@@ -41,13 +44,33 @@ def author(update, context):
             "Correu: jordi.cluet@upc.edu"
     )
 
-def counter(update, context):
-    if 'counter' not in context.user_data:
-        context.user_data['counter'] = 0
-    context.user_data['counter'] += 1
+
+def lst(update, context):
+    
+    if 'visitor' not in context.user_data:
+        context.user_data['visitor'] = EvalVisitor()
+
+    skys = context.user_data['visitor'].taula_simbols
+    if not skys:
+        context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = "No hi ha cap identificador definit")
+    else:
+        msg = "id -> àrea"
+        for id, sky in skys.items():
+            msg += "\n" + id + " -> " + str(sky.area())
+        context.bot.send_message(
+            chat_id = update.effective_chat.id,
+            text = msg)
+
+
+def clean(update, context):
+    if 'visitor' in context.user_data:
+        context.user_data['visitor'].taula_simbols = {}
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=str(context.user_data['counter']))
+        text = "Identificadors eliminats")
+
 
 def load(update, context):
     id = ' '.join(context.args)
@@ -75,14 +98,16 @@ def load(update, context):
         text=id
     )
 
+
 def save(update, context):
     id = ' '.join(context.args)
-    sk = Skyline(2,3,4)
-    write_pickle(sk, id + ".sky")
-    
+    sky = Skyline(2,3,4)
+    nom = id + ".sky"
+    write_pickle(sky, nom)
+        
     context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=id
+        chat_id = update.effective_chat.id,
+        text = "Skyline guardat com a " + nom
     )
 
 
@@ -96,6 +121,7 @@ def write_pickle(obj: object, filename: str):
     """Save object in pickle file."""
     with open(filename, "wb") as file:
         return pickle.dump(obj, file)
+
 
 def genera_grafic(sk):
     xs = []
@@ -115,46 +141,61 @@ def genera_grafic(sk):
     plt.close()
 
 
-#visitor = EvalVisitor()
+class MyErrorListener( ErrorListener ):
 
-def aux(update, context):
+    def __init__(self):
+        super(MyErrorListener, self).__init__()
+
+    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        raise Exception
+
+    def reportAmbiguity(self, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs):
+        raise Exception
+
+    def reportAttemptingFullContext(self, recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs):
+        raise Exception
+
+    def reportContextSensitivity(self, recognizer, dfa, startIndex, stopIndex, prediction, configs):
+        raise Exception
+
+
+def missatge(update, context):
     
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
-    tree = parser.root()
-    #visitor = EvalVisitor()
+    parser.addErrorListener(MyErrorListener())
 
-    if 'visitor' not in context.user_data:
-        context.user_data['visitor'] = EvalVisitor()
-    
+    tree = None
+
     try:
-        (var, sk) = context.user_data['visitor'].visit(tree)
-    except KeyError:
-        context.bot.send_message(
-            chat_id = update.effective_chat.id,
-            text = "Aquest identificador no existeix")
-        raise Exception
-    except TypeError:
-        context.bot.send_message(
-            chat_id = update.effective_chat.id,
-            text = "Error de tipus: operació no suportada")
-        raise Exception
+        tree = parser.root()
     except Exception as err:
+        context.bot.send_message(chat_id = update.effective_chat.id, text = "Error en parsejar l'expressió. Comprova la terminal")
+        raise
+
+    try:
+        if 'visitor' not in context.user_data:
+            context.user_data['visitor'] = EvalVisitor()
+        (var, sk) = context.user_data['visitor'].visit(tree)
+        genera_grafic(sk)
+
+    except KeyError:
+        context.bot.send_message(chat_id = update.effective_chat.id, text = "Aquest identificador no existeix")
+        raise
+    except TypeError:
+        context.bot.send_message(chat_id = update.effective_chat.id, text = "Error de tipus: operació no suportada")
+        raise
+    except Exception as err:
+        context.bot.send_message(chat_id = update.effective_chat.id, text = "Hi ha hagut una excepció. Comprova la terminal")
         print(traceback.format_exc())
         print(sys.exc_info())
-        raise Exception
+        raise
 
     # print("Var: ", var)
     # print("Nombre d'edificis: ", len(sk.edificis))
     # print("Edificis: ", sk.edificis)
-
-    try:
-        genera_grafic(sk)
-    except Exception:
-        print(traceback.format_exc())
-        print(sys.exc_info())
 
     context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
     context.bot.send_message(chat_id = update.effective_chat.id, text = ("area: " + str(sk.area())))
@@ -169,14 +210,15 @@ dispatcher = updater.dispatcher
 
 # indica que quan el bot rebi una comanda s'executi la funció corresponent
 dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('counter', counter))
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(CommandHandler('author', author))
+dispatcher.add_handler(CommandHandler('lst', lst))
+dispatcher.add_handler(CommandHandler('clean', clean))
 dispatcher.add_handler(CommandHandler('load', load))
 dispatcher.add_handler(CommandHandler('save', save))
 
 
-updater.dispatcher.add_handler(MessageHandler(Filters.text, aux))
+updater.dispatcher.add_handler(MessageHandler(Filters.text, missatge))
 
 # engega el bot
 updater.start_polling()
