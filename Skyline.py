@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import random
 import time
 
-count = 0
-
 def unio_rec(skylines):
     if len(skylines) == 1:
         return skylines[0]
@@ -54,7 +52,7 @@ class Skyline:
             raise Exception
 
         skylines = []
-        
+
         for i in range(n):
             alt = random.randint(0, h)
             esq = ampl = xmax
@@ -123,13 +121,19 @@ class Skyline:
     def mostra(self):
         xs = []
         hs = []
-        for i in range(len(self.edificis)-1):
-            dif = self.edificis[i+1][0] - self.edificis[i][0]
-            xs += [self.edificis[i][0]+k for k in range(dif)]
-            hs += [self.edificis[i][1]] * dif
+        ws = []
+        e1 = self.edificis[0]
+        for i in range(1, len(self.edificis)):
+            e2 = self.edificis[i]
+            if e1[1] > 0:
+                xs.append(e1[0])
+                hs.append(e1[1])
+                ws.append(e2[0] - e1[0])
+            e1 = e2
 
-        plt.bar(xs, hs, width=1, align='edge', color=['red'])
+        plt.bar(xs, hs, width=ws, align='edge', color=['red'])
         plt.show()
+        #plt.savefig('plot.png')
         plt.close()
 
     def unio(self, sky2):
@@ -151,8 +155,6 @@ class Skyline:
         (x2, h2) = ed2[it2]
 
         while it1 != len(ed1) and it2 != len(ed2):
-            global count
-            count+=1
 
             if x1 == x2:
                 ed1[it1] = (x1, max(h1,h2))
@@ -328,21 +330,16 @@ def main():
     start1 = time.time()
     sk1 = Skyline(100000,20,3,1,10000)
     end1 = time.time()
-    print(len(sk1.edificis))
     print(end1 - start1)
-    print(sk1.edificis[:100])
     sk1.mostra()
-    #start2 = time.time()
-    #sk2 = Skyline(10000,20,3,1,10000)
-    #end2 = time.time()
-    #start3 = time.time()
-    #sk1.unio(sk2)
-    #end3 = time.time()
+    # sk2 = Skyline(10000,20,3,1,10000)
+    # end2 = time.time()
+    # start3 = time.time()
+    # sk1.unio(sk2)
+    # end3 = time.time()
     # print(end1 - start1)
-    #print(end2 - start2)
-    #print(end3 - start3)
-    print(count)
-
+    # print(end2 - start2)
+    # print(end3 - start3)
     # sk1 = Skyline(1,2,3)
     # sk2 = Skyline(2,3,4)
     # sk3 = Skyline(2,1,6)
