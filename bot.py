@@ -143,16 +143,16 @@ class MyErrorListener(ErrorListener):
     def __init__(self):
         super(MyErrorListener, self).__init__()
 
-    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+    def syntaxError(self):
         raise Exception
 
-    def reportAmbiguity(self, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs):
+    def reportAmbiguity(self):
         raise Exception
 
-    def reportAttemptingFullContext(self, recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs):
+    def reportAttemptingFullContext(self):
         raise Exception
 
-    def reportContextSensitivity(self, recognizer, dfa, startIndex, stopIndex, prediction, configs):
+    def reportContextSensitivity(self):
         raise Exception
 
 
@@ -179,9 +179,12 @@ def entrada(update, context):
         (var, sk) = context.user_data['visitor'].visit(tree)
         genera_grafic(sk)
 
-        context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
-        sortida(update, context, text = ("area: " + str(sk.area())))
-        sortida(update, context, text = "alçada: " + str(sk.alcada()))
+        context.bot.send_photo(
+            chat_id=update.message.chat_id,
+            photo=open('plot.png', 'rb')
+        )
+        sortida(update, context, "area: " + str(sk.area()))
+        sortida(update, context, "alçada: " + str(sk.alcada()))
 
         # print("Var: ", var)
         # print("Nombre d'edificis: ", len(sk.edificis))
