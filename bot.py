@@ -49,15 +49,15 @@ def author(update, context):
 def lst(update, context):
     """Mostra els identificadors definits i la seva corresponent àrea."""
     try:
-        skys = context.user_data['taula_simbols'] if 'taula_simbols' in context.user_data else {}
+        ts = context.user_data['taula_simbols'] \
+            if 'taula_simbols' in context.user_data else {}
 
-        if not skys:
+        if not ts:
             text = "No hi ha cap identificador definit"
         else:
             text = "id -> àrea"
-            for id, sky in skys.items():
+            for id, sky in ts.items():
                 text += "\n" + str(id) + " -> " + str(sky.area())
-
         sortida(update, context, text)
 
     except Exception:
@@ -78,18 +78,16 @@ def clean(update, context):
 def save(update, context):
     """Guarda l'skyline id amb nom id.sky"""
     id = ' '.join(context.args)
-    simbols = {}
     if 'taula_simbols' in context.user_data:
-        simbols = context.user_data['taula_simbols']
-        if id in simbols:
-            sky = simbols[id]
+        ts = context.user_data['taula_simbols']
+        if id in ts:
+            sky = ts[id]
             nom = id + ".sky"
             escriu_pickle(sky, nom)
             text = "Skyline guardat com a " + nom
-            sortida(update, context, text)
-            return
+    else:
+        text = "Aquest identificador no existeix"
 
-    text = "Aquest identificador no existeix"
     sortida(update, context, text)
 
 
@@ -107,7 +105,6 @@ def load(update, context):
 
     except FileNotFoundError:
         text = "El fitxer " + nom + " no existeix"
-
     except Exception:
         text = "Error en carregar l'Skyline. Comprova la terminal"
 
@@ -145,23 +142,28 @@ def genera_grafic(sk: Skyline):
     plt.close()
 
 
+class ParseError(Exception):
+    """Classe per errors durant el parsejat"""
+    pass
+
+
 class MyErrorListener(ErrorListener):
     """Classe per controlar els errors al parser i llançar excepcions."""
 
     def __init__(self):
         super(MyErrorListener, self).__init__()
 
-    def syntaxError(self):
-        raise Exception
+    def syntaxError(self, *args):
+        raise ParseError
 
-    def reportAmbiguity(self):
-        raise Exception
+    def reportAmbiguity(self, *args):
+        raise ParseError
 
-    def reportAttemptingFullContext(self):
-        raise Exception
+    def reportAttemptingFullContext(self, *args):
+        raise ParseError
 
-    def reportContextSensitivity(self):
-        raise Exception
+    def reportContextSensitivity(self, *args):
+        raise ParseError
 
 
 def entrada(update, context):
@@ -172,39 +174,30 @@ def entrada(update, context):
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
     parser.addErrorListener(MyErrorListener())
-    tree = None
 
     try:
         tree = parser.root()
-    except Exception:
-        text = "Error en parsejar l'expressió. Comprova la terminal."
-        sortida(update, context, text)
-        raise
 
-    try:
         if 'taula_simbols' not in context.user_data:
             context.user_data['taula_simbols'] = {}
-
         visitor = EvalVisitor(context.user_data['taula_simbols'])
 
         (var, sk) = visitor.visit(tree)
-        genera_grafic(sk)
 
+        genera_grafic(sk)
         context.bot.send_photo(
             chat_id=update.message.chat_id,
             photo=open('tmp.png', 'rb')
         )
-        os.remove("tmp.png") 
+        os.remove("tmp.png")
 
         sortida(update, context, "area: " + str(sk.area()))
         sortida(update, context, "alçada: " + str(sk.alcada()))
 
         context.user_data['taula_simbols'][var] = sk
 
-        # print("Var: ", var)
-        # print("Nombre d'edificis: ", len(sk.edificis))
-        # print("Edificis: ", sk.edificis)
-
+    except ParseError:
+        text = "Error en parsejar l'expressió."
     except KeyError:
         text = "Aquest identificador no existeix."
     except TypeError:
@@ -243,9 +236,6 @@ dispatcher.add_handler(CommandHandler('save', save))
 
 # Permet que la funció entrada s'executi cada vegada que arriba un missatge
 updater.dispatcher.add_handler(MessageHandler(Filters.text, entrada))
-
-# Instància de visitor que usarà el bot
-
 
 # Engega el bot
 updater.start_polling()
