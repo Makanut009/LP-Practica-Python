@@ -13,6 +13,16 @@ A més, cal tenir instal·lat Telegram en algun dispositiu.
 Per córrer el bot tan sols cal executar ```python3 bot.py```.
 Un cop fet això, tan sols cal enviar missatges al bot (usuari @SkyLine4Bot) mitjançant Telegram, i seguint les pautes que es detallen a l'enunciat.
 
+### Detalls de la implementació
+
+### Bot
+
+
+### Classe Skyline
+
+
+### Gramàtica
+
 
 
 ## Built With
