@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import random
 import time
@@ -312,7 +311,7 @@ def main():
     start1 = time.time()
     end1 = time.time()
     print(end1 - start1)
-    
+
 
 if __name__ == "__main__":
     main()

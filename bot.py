@@ -3,6 +3,7 @@ import os
 import traceback
 import pickle
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 from antlr4 import *
 from antlr4.error.ErrorListener import ErrorListener
@@ -137,6 +138,8 @@ def genera_grafic(sk: Skyline):
             ws.append(e2[0] - e1[0])
         e1 = e2
 
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.bar(xs, hs, width=ws, align='edge', color=['red'])
     plt.savefig('tmp.png')
     plt.close()
@@ -191,8 +194,8 @@ def entrada(update, context):
         )
         os.remove("tmp.png")
 
-        sortida(update, context, "area: " + str(sk.area()))
-        sortida(update, context, "alçada: " + str(sk.alcada()))
+        sortida(update, context, "Àrea: " + str(sk.area()))
+        sortida(update, context, "Alçada: " + str(sk.alcada()))
 
         context.user_data['taula_simbols'][var] = sk
 
