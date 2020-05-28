@@ -9,8 +9,8 @@ else:
 
 class EvalVisitor(ParseTreeVisitor):
 
-    def __init__(self):
-        self.taula_simbols = {}
+    def __init__(self, ts):
+        self.taula_simbols = ts
 
     # Visit a parse tree produced by SkylineParser#root.
     def visitRoot(self, ctx: SkylineParser.RootContext):

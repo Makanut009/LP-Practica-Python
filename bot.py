@@ -1,29 +1,31 @@
 import sys
 import os
 import traceback
+import pickle
+import matplotlib.pyplot as plt
 
 from antlr4 import *
 from antlr4.error.ErrorListener import ErrorListener
 
-from telegram import ParseMode
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
-from Skyline import Skyline
 from cl.SkylineLexer import SkylineLexer
 from cl.SkylineParser import SkylineParser
 from cl.EvalVisitor import EvalVisitor
 
-import pickle
-import matplotlib.pyplot as plt
+from Skyline import Skyline
+
+from telegram import ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
 def start(update, context):
+    """Dona la benvinguda al bot."""
     text = "Benvingut a SkyLineBot!\n" \
         + "Usa /help per veure les comandes disponibles."
     sortida(update, context, text)
 
 
 def help(update, context):
+    """Llista les comandes disponibles."""
     text = "Sóc un bot amb les següents comandes:\n" \
         + "/start: inicia la conversa amb el Bot\n" \
         + "/help: llista les comandes disponibles\n" \
@@ -37,6 +39,7 @@ def help(update, context):
 
 
 def author(update, context):
+    """Escriu el nom i correu de l'autor."""
     text = "SkylineBot (@SkyLine4Bot)\n" \
         + "Autor: Jordi Cluet Martinell\n" \
         + "Correu: jordi.cluet@upc.edu"
@@ -44,6 +47,7 @@ def author(update, context):
 
 
 def lst(update, context):
+    """Mostra els identificadors definits i la seva corresponent àrea."""
     try:
         skys = context.user_data['taula_simbols'] if 'taula_simbols' in context.user_data else {}
 
@@ -64,6 +68,7 @@ def lst(update, context):
 
 
 def clean(update, context):
+    """Esborra tots els identificadors definits."""
     if 'taula_simbols' in context.user_data:
         context.user_data['taula_simbols'] = {}
     text = "Identificadors eliminats"
@@ -71,8 +76,8 @@ def clean(update, context):
 
 
 def save(update, context):
+    """Guarda l'skyline id amb nom id.sky"""
     id = ' '.join(context.args)
-
     simbols = {}
     if 'taula_simbols' in context.user_data:
         simbols = context.user_data['taula_simbols']
@@ -89,6 +94,7 @@ def save(update, context):
 
 
 def load(update, context):
+    """Carrega l'skyline id de l’arxiu id.sky"""
     id = ' '.join(context.args)
     nom = id + ".sky"
 
@@ -140,6 +146,7 @@ def genera_grafic(sk: Skyline):
 
 
 class MyErrorListener(ErrorListener):
+    """Classe per controlar els errors al parser i llançar excepcions."""
 
     def __init__(self):
         super(MyErrorListener, self).__init__()
@@ -156,21 +163,20 @@ class MyErrorListener(ErrorListener):
     def reportContextSensitivity(self):
         raise Exception
 
-visitor = EvalVisitor()
 
 def entrada(update, context):
+    """Parseja el missatge d'entrada, crea l'skyline i l'envia."""
 
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = SkylineParser(token_stream)
     parser.addErrorListener(MyErrorListener())
-
     tree = None
 
     try:
         tree = parser.root()
-    except Exception as err:
+    except Exception:
         text = "Error en parsejar l'expressió. Comprova la terminal."
         sortida(update, context, text)
         raise
@@ -178,7 +184,8 @@ def entrada(update, context):
     try:
         if 'taula_simbols' not in context.user_data:
             context.user_data['taula_simbols'] = {}
-        visitor.taula_simbols = context.user_data['taula_simbols']
+
+        visitor = EvalVisitor(context.user_data['taula_simbols'])
 
         (var, sk) = visitor.visit(tree)
         genera_grafic(sk)
@@ -211,19 +218,21 @@ def entrada(update, context):
 
 
 def sortida(update, context, text):
+    """Envia el missatge text a l'usuari."""
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=text
     )
 
 
-# declara una constant amb el access token que llegeix de token.txt
+# Constant amb l'access token del bot que llegeix de token.txt
 TOKEN = open('token.txt').read().strip()
-# crea objectes per treballar amb Telegram
+
+# Objectes per treballar amb Telegram
 updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
-# indica que quan el bot rebi una comanda s'executi la funció corresponent
+# Indica que quan el bot rebi una comanda s'executi la funció corresponent
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(CommandHandler('author', author))
@@ -232,7 +241,11 @@ dispatcher.add_handler(CommandHandler('clean', clean))
 dispatcher.add_handler(CommandHandler('load', load))
 dispatcher.add_handler(CommandHandler('save', save))
 
+# Permet que la funció entrada s'executi cada vegada que arriba un missatge
 updater.dispatcher.add_handler(MessageHandler(Filters.text, entrada))
 
-# engega el bot
+# Instància de visitor que usarà el bot
+
+
+# Engega el bot
 updater.start_polling()
