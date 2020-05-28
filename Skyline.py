@@ -3,18 +3,6 @@ import random
 import time
 
 
-def unio_rec(skylines):
-    if len(skylines) == 1:
-        return skylines[0]
-
-    if len(skylines) == 2:
-        return skylines[0].unio(skylines[1])
-
-    sk1 = unio_rec(skylines[:len(skylines)//2])
-    sk2 = unio_rec(skylines[len(skylines)//2:])
-    return sk1.unio(sk2)
-
-
 class Skyline:
 
     def __init__(self, *args):
@@ -41,38 +29,11 @@ class Skyline:
             print("Nombre de paràmetres incorrectes per crear l'skyline")
             raise Exception
 
-    def random(self, n, h, w, xmin, xmax):
-        if n < 1:
-            raise Exception
-        if h < 0:
-            raise Exception
-        if w < 1:
-            raise Exception
-        if xmax <= xmin:
-            raise Exception
-
-        skylines = []
-
-        for i in range(n):
-            alt = random.randint(0, h)
-            esq = ampl = xmax
-            while esq + ampl > xmax:
-                esq = random.randint(xmin, xmax)
-                ampl = random.randint(1, min(w, xmax-xmin))
-                dreta = esq + ampl
-            skylines += [Skyline(esq, alt, esq+w)]
-
-        self.edificis = (unio_rec(skylines)).edificis
-
     def __mul__(self, other):
         if isinstance(other, self.__class__):
-            print("Interseccio d'skylines")
             return self.interseccio(other)
-
         elif isinstance(other, int):
-            print("Replicacio N vegades de l'skyline")
             return self.replica_skyline(other)
-
         else:
             return NotImplemented
 
@@ -81,13 +42,9 @@ class Skyline:
 
     def __add__(self, other):
         if isinstance(other, self.__class__):
-            print("Unio d'skylines")
             return self.unio(other)
-
         elif isinstance(other, int):
-            print("Desplaçament a la dreta de l’skyline N posicions")
             return self.desp_dreta(other)
-
         else:
             return NotImplemented
 
@@ -96,25 +53,32 @@ class Skyline:
 
     def __sub__(self, other):
         if isinstance(other, int):
-            print("Desplaçament a l’esquerra de l’skyline N posicions")
             return self.desp_esq(other)
         else:
             return NotImplemented
 
     def __neg__(self):
-        print("Retorna l’skyline reflectit")
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
         xs = [-e[0]+esq+dreta for e in self.edificis]
         xs.reverse()
         hs = [0] + [e[1] for e in self.edificis[:-1]]
         hs.reverse()
-        edificis = list(zip(xs, hs))
+
         sk = Skyline()
-        sk.edificis = edificis
+        sk.edificis = list(zip(xs, hs))
         return sk
 
     def __str__(self):
         return str(self.edificis)
+
+
+    def random(self, n, h, w, xmin, xmax):
+        if n < 1 or h < 0 or w < 1 or xmax <= xmin:
+            raise Exception
+        
+        skylines = [next(rg(h, w, xmin, xmax)) for _ in range(n)]
+
+        self.edificis = (unio_rec(skylines)).edificis
 
     def mostra(self):
         xs = []
@@ -268,34 +232,24 @@ class Skyline:
         return nou_sky
 
     def replica_skyline(self, N):
-
         xmin = self.edificis[0][0]
         xmax = self.edificis[-1][0]
         mida = xmax - xmin
-        res = []
 
-        for i in range(0, N):
-            for e in self.edificis:
-                res.append((e[0]+mida*i, e[1]))
+        res = [(e[0]+mida*i, e[1]) for i in range(1, N) for e in self.edificis]
 
         nou_sky = Skyline()
-        nou_sky.edificis = res
+        nou_sky.edificis = self.edificis + res
         return nou_sky
 
-    def desp_dreta(self, N):  # Es podria fer amb map?
-        res = []
-        for e in self.edificis:
-            res.append((e[0]+N, e[1]))
+    def desp_dreta(self, N):
         nou_sky = Skyline()
-        nou_sky.edificis = res
+        nou_sky.edificis = list(map(lambda e: (e[0]+N, e[1]), self.edificis))
         return nou_sky
 
-    def desp_esq(self, N):  # Es podria fer amb map?
-        res = []
-        for e in self.edificis:
-            res.append((e[0]-N, e[1]))
+    def desp_esq(self, N):
         nou_sky = Skyline()
-        nou_sky.edificis = res
+        nou_sky.edificis = list(map(lambda e: (e[0]-N, e[1]), self.edificis))
         return nou_sky
 
     def area(self):
@@ -309,13 +263,39 @@ class Skyline:
         return max([e[1] for e in self.edificis])
 
 
+def rg(h, w, xmin, xmax):
+    while True:
+        alt = random.randint(0, h)
+        esq = ampl = xmax
+        while esq + ampl > xmax:
+            esq = random.randint(xmin, xmax)
+            ampl = random.randint(1, min(w, xmax-xmin))
+            dreta = esq + ampl
+        yield Skyline(esq, alt, esq+w)
+
+
+def unio_rec(skylines):
+    if len(skylines) == 1:
+        return skylines[0]
+
+    if len(skylines) == 2:
+        return skylines[0].unio(skylines[1])
+
+    sk1 = unio_rec(skylines[:len(skylines)//2])
+    sk2 = unio_rec(skylines[len(skylines)//2:])
+    return sk1.unio(sk2)
+
+
 def main():
-    sk1 = Skyline()
-    sk2 = Skyline(1, 2, 3)
-    sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
-    sk4 = Skyline(10000, 20, 3, 1, 10000)
+    #sk1 = Skyline()
+    #sk2 = Skyline(1, 2, 3)
+    #sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
+    #sk4 = Skyline(10000, 20, 3, 1, 10000)
+    #sk5 = Skyline(5, 10, 3, 0, 100)
     start1 = time.time()
+    sk4 = Skyline(100000, 20, 3, 1, 10000)
     end1 = time.time()
+    sk4.mostra()
     print(end1 - start1)
 
 
