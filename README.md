@@ -15,13 +15,13 @@ Un cop fet això, tan sols cal enviar missatges al bot (usuari @SkyLine4Bot) mit
 
 ### Detalls de la implementació
 
-### Bot
+#### Bot
 
 
-### Classe Skyline
+#### Classe Skyline
 
 
-### Gramàtica
+#### Gramàtica
 
 
 
