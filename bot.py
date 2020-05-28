@@ -1,4 +1,5 @@
 import sys
+import os
 import traceback
 
 from antlr4 import *
@@ -25,6 +26,7 @@ def start(update, context):
 def help(update, context):
     text = "Sóc un bot amb les següents comandes:\n" \
         + "/start: inicia la conversa amb el Bot\n" \
+        + "/help: llista les comandes disponibles\n" \
         + "/author: escriu el nom i correu de l'autor\n" \
         + "/lst: mostra els identificadors definits i " \
         + "la seva corresponent àrea\n" \
@@ -42,51 +44,29 @@ def author(update, context):
 
 
 def lst(update, context):
+    try:
+        skys = context.user_data['taula_simbols'] if 'taula_simbols' in context.user_data else {}
 
-    skys = context.user_data['visitor'].taula_simbols \
-        if 'visitor' in context.user_data else {}
+        if not skys:
+            text = "No hi ha cap identificador definit"
+        else:
+            text = "id -> àrea"
+            for id, sky in skys.items():
+                text += "\n" + str(id) + " -> " + str(sky.area())
 
-    if not skys:
-        text = "No hi ha cap identificador definit"
-    else:
-        text = "id -> àrea"
-        for id, sky in skys.items():
-            text += "\n" + id + " -> " + str(sky.area())
+        sortida(update, context, text)
 
-    sortida(update, context, text)
+    except Exception:
+        text = "Hi ha hagut un error. Comprova la terminal."
+        sortida(update, context, text)
+        print(traceback.format_exc())
+        print(sys.exc_info())
 
 
 def clean(update, context):
-    if 'visitor' in context.user_data:
-        context.user_data['visitor'].taula_simbols = {}
+    if 'taula_simbols' in context.user_data:
+        context.user_data['taula_simbols'] = {}
     text = "Identificadors eliminats"
-    sortida(update, context, text)
-
-
-def sortida(update, context, text):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text
-    )
-
-
-def load(update, context):
-    id = ' '.join(context.args)
-    nom = id + ".sky"
-
-    try:
-        sky = llegeix_pickle(nom)
-        if 'visitor' not in context.user_data:
-            context.user_data['visitor'] = EvalVisitor()
-        context.user_data['visitor'].taula_simbols[id] = sky
-        text = "Skyline " + id + " carregat"
-
-    except FileNotFoundError:
-        text = "El fitxer " + nom + " no existeix"
-
-    except Exception:
-        text = "Error en carregar l'Skyline. Comprova la terminal"
-
     sortida(update, context, text)
 
 
@@ -94,8 +74,8 @@ def save(update, context):
     id = ' '.join(context.args)
 
     simbols = {}
-    if 'visitor' in context.user_data:
-        simbols = context.user_data['visitor'].taula_simbols
+    if 'taula_simbols' in context.user_data:
+        simbols = context.user_data['taula_simbols']
         if id in simbols:
             sky = simbols[id]
             nom = id + ".sky"
@@ -105,6 +85,26 @@ def save(update, context):
             return
 
     text = "Aquest identificador no existeix"
+    sortida(update, context, text)
+
+
+def load(update, context):
+    id = ' '.join(context.args)
+    nom = id + ".sky"
+
+    try:
+        sky = llegeix_pickle(nom)
+        if 'taula_simbols' not in context.user_data:
+            context.user_data['taula_simbols'] = {}
+        context.user_data['taula_simbols'][id] = sky
+        text = "Skyline " + id + " carregat"
+
+    except FileNotFoundError:
+        text = "El fitxer " + nom + " no existeix"
+
+    except Exception:
+        text = "Error en carregar l'Skyline. Comprova la terminal"
+
     sortida(update, context, text)
 
 
@@ -121,6 +121,7 @@ def escriu_pickle(obj: object, fitxer: str):
 
 
 def genera_grafic(sk: Skyline):
+    """Genera el gràfic de l'skyline i el guarda en un fitxer temporal."""
     xs = []
     hs = []
     ws = []
@@ -134,7 +135,7 @@ def genera_grafic(sk: Skyline):
         e1 = e2
 
     plt.bar(xs, hs, width=ws, align='edge', color=['red'])
-    plt.savefig('plot.png')
+    plt.savefig('tmp.png')
     plt.close()
 
 
@@ -155,6 +156,7 @@ class MyErrorListener(ErrorListener):
     def reportContextSensitivity(self):
         raise Exception
 
+visitor = EvalVisitor()
 
 def entrada(update, context):
 
@@ -174,17 +176,23 @@ def entrada(update, context):
         raise
 
     try:
-        if 'visitor' not in context.user_data:
-            context.user_data['visitor'] = EvalVisitor()
-        (var, sk) = context.user_data['visitor'].visit(tree)
+        if 'taula_simbols' not in context.user_data:
+            context.user_data['taula_simbols'] = {}
+        visitor.taula_simbols = context.user_data['taula_simbols']
+
+        (var, sk) = visitor.visit(tree)
         genera_grafic(sk)
 
         context.bot.send_photo(
             chat_id=update.message.chat_id,
-            photo=open('plot.png', 'rb')
+            photo=open('tmp.png', 'rb')
         )
+        os.remove("tmp.png") 
+
         sortida(update, context, "area: " + str(sk.area()))
         sortida(update, context, "alçada: " + str(sk.alcada()))
+
+        context.user_data['taula_simbols'][var] = sk
 
         # print("Var: ", var)
         # print("Nombre d'edificis: ", len(sk.edificis))
@@ -200,6 +208,13 @@ def entrada(update, context):
         print(sys.exc_info())
 
     sortida(update, context, text)
+
+
+def sortida(update, context, text):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=text
+    )
 
 
 # declara una constant amb el access token que llegeix de token.txt
