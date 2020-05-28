@@ -6,6 +6,7 @@ import time
 class Skyline:
 
     def __init__(self, *args):
+        """Inicialitza l'skyline de diferent manera segons el nombre de paràmetres"""
 
         if not args:
             self.edificis = []
@@ -17,7 +18,7 @@ class Skyline:
                 skylines += [Skyline(e[0], e[1], e[2])]
             self.edificis = (unio_rec(skylines)).edificis
 
-        # Creació normal
+        # Creació simple
         elif len(args) == 3:
             self.edificis = [(args[0], args[1]), (args[2], 0)]
 
@@ -30,10 +31,11 @@ class Skyline:
             raise Exception
 
     def __mul__(self, other):
-        if isinstance(other, self.__class__):
+        """Definició de l'operació '*' per als skylines"""
+        if isinstance(other, self.__class__):   # Dos skylines -> Intersecció
             return self.interseccio(other)
         elif isinstance(other, int):
-            return self.replica_skyline(other)
+            return self.replica_skyline(other)  # Skyline i enter -> Replicació
         else:
             return NotImplemented
 
@@ -41,9 +43,10 @@ class Skyline:
         return self*other
 
     def __add__(self, other):
-        if isinstance(other, self.__class__):
+        """Definició de l'operació '+' per als skylines"""
+        if isinstance(other, self.__class__):   # Dos skylines -> Unió
             return self.unio(other)
-        elif isinstance(other, int):
+        elif isinstance(other, int):            # Skyline i enter -> Desplaçament dreta
             return self.desp_dreta(other)
         else:
             return NotImplemented
@@ -52,12 +55,14 @@ class Skyline:
         return self+other
 
     def __sub__(self, other):
-        if isinstance(other, int):
+        """Definició de l'operació '-' per als skylines"""
+        if isinstance(other, int):              # Skyline i enter -> Desplaçament esquerra
             return self.desp_esq(other)
         else:
             return NotImplemented
 
     def __neg__(self):
+        """Negació d'skylines"""
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
         xs = [-e[0]+esq+dreta for e in self.edificis]
         xs.reverse()
@@ -69,18 +74,19 @@ class Skyline:
         return sk
 
     def __str__(self):
+        """Mètode per imprimir els skylines per terminal"""
         return str(self.edificis)
 
 
     def random(self, n, h, w, xmin, xmax):
+        """Genera un skyline a partir d'n edificis generats aleatòriament"""
         if n < 1 or h < 0 or w < 1 or xmax <= xmin:
             raise Exception
-        
         skylines = [next(rg(h, w, xmin, xmax)) for _ in range(n)]
-
         self.edificis = (unio_rec(skylines)).edificis
 
     def mostra(self):
+        """Genera i mostra la figura de l'skyline"""
         xs = []
         hs = []
         ws = []
@@ -98,6 +104,7 @@ class Skyline:
         plt.close()
 
     def unio(self, sky2):
+        """Computa la unió de dos skylines"""
 
         ed1 = self.edificis.copy()
         ed2 = sky2.edificis
@@ -179,6 +186,7 @@ class Skyline:
         return nou_sky
 
     def interseccio(self, sky2):
+        """Computa la intersecció de dos skylines"""
 
         ed1 = self.edificis
         ed2 = sky2.edificis
@@ -232,6 +240,7 @@ class Skyline:
         return nou_sky
 
     def replica_skyline(self, N):
+        """Replica l'skyline N vegades"""
         xmin = self.edificis[0][0]
         xmax = self.edificis[-1][0]
         mida = xmax - xmin
@@ -243,16 +252,19 @@ class Skyline:
         return nou_sky
 
     def desp_dreta(self, N):
+        """Desplaça l'skyline N posicions cap a la dreta"""
         nou_sky = Skyline()
         nou_sky.edificis = list(map(lambda e: (e[0]+N, e[1]), self.edificis))
         return nou_sky
 
     def desp_esq(self, N):
+        """Desplaça l'skyline N posicions cap a l'esquerra"""
         nou_sky = Skyline()
         nou_sky.edificis = list(map(lambda e: (e[0]-N, e[1]), self.edificis))
         return nou_sky
 
     def area(self):
+        """Calcula l'àrea de l'skyline"""
         area = 0
         eds = self.edificis
         for i in range(len(eds)-1):
@@ -260,10 +272,12 @@ class Skyline:
         return area
 
     def alcada(self):
+        """Calcula l'alçada màxima de l'skyline"""
         return max([e[1] for e in self.edificis])
 
 
 def rg(h, w, xmin, xmax):
+    """Generador aleatori d'skylines"""
     while True:
         alt = random.randint(0, h)
         esq = ampl = xmax
@@ -275,6 +289,7 @@ def rg(h, w, xmin, xmax):
 
 
 def unio_rec(skylines):
+    """Uneix la llista d'skylines recursivament"""
     if len(skylines) == 1:
         return skylines[0]
 
