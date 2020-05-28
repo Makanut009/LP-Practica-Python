@@ -6,14 +6,13 @@ import time
 def unio_rec(skylines):
     if len(skylines) == 1:
         return skylines[0]
+
     if len(skylines) == 2:
-        skylines[0].unio(skylines[1])
-        return skylines[0]
+        return skylines[0].unio(skylines[1])
     
     sk1 = unio_rec(skylines[:len(skylines)//2])
     sk2 = unio_rec(skylines[len(skylines)//2:])
-    sk1.unio(sk2)
-    return sk1
+    return sk1.unio(sk2)
 
 class Skyline:
 
@@ -24,10 +23,10 @@ class Skyline:
 
         # Creació composta
         elif len(args) == 1:
-            self.edificis = []
+            skylines = []
             for e in args[0]:
-                sk = Skyline(e[0], e[1], e[2])
-                self.edificis = self.unio(sk).edificis.copy()
+                skylines += [Skyline(e[0], e[1], e[2])]
+            self.edificis = (unio_rec(skylines)).edificis
 
         # Creació normal
         elif len(args) == 3:
@@ -62,9 +61,7 @@ class Skyline:
                 dreta = esq + ampl
             skylines += [Skyline(esq, alt, esq+w)]
 
-        aux = unio_rec(skylines)
-        self.edificis = aux.edificis
-    
+        self.edificis = (unio_rec(skylines)).edificis
 
     def __mul__(self, other):
         if isinstance(other, self.__class__):
@@ -133,12 +130,11 @@ class Skyline:
 
         plt.bar(xs, hs, width=ws, align='edge', color=['red'])
         plt.show()
-        #plt.savefig('plot.png')
         plt.close()
 
     def unio(self, sky2):
 
-        ed1 = self.edificis
+        ed1 = self.edificis.copy()
         ed2 = sky2.edificis
         #res = []
 
@@ -207,14 +203,10 @@ class Skyline:
 
         if it1 == len(ed1) and it2 != len(ed2):
             ed1 += ed2[it2:]
-        # elif it2 == len(ed2) and it1 != len(ed1):
-        #     res += ed1[it1:]
 
-        #ed1[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
-
-        # nou_sky = Skyline()
-        # nou_sky.edificis = res
-        # return self
+        nou_sky = Skyline()
+        nou_sky.edificis = ed1
+        return nou_sky
 
     def interseccio(self, sky2):
 
@@ -329,6 +321,7 @@ def main():
     # sk3.mostra()
     start1 = time.time()
     sk1 = Skyline(100000,20,3,1,10000)
+    # sk1 = Skyline([(0,3,1),(1,1,2),(3,3,4)])
     end1 = time.time()
     print(end1 - start1)
     sk1.mostra()
