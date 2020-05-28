@@ -2,16 +2,18 @@ import matplotlib.pyplot as plt
 import random
 import time
 
+
 def unio_rec(skylines):
     if len(skylines) == 1:
         return skylines[0]
 
     if len(skylines) == 2:
         return skylines[0].unio(skylines[1])
-    
+
     sk1 = unio_rec(skylines[:len(skylines)//2])
     sk2 = unio_rec(skylines[len(skylines)//2:])
     return sk1.unio(sk2)
+
 
 class Skyline:
 
@@ -140,7 +142,7 @@ class Skyline:
             nou_sky = Skyline()
             nou_sky.edificis = ed2
             return nou_sky
-            
+
         if not ed2:
             nou_sky = Skyline()
             nou_sky.edificis = ed1
@@ -154,13 +156,15 @@ class Skyline:
         while it1 != len(ed1) and it2 != len(ed2):
 
             if x1 == x2:
-                ed1[it1] = (x1, max(h1,h2))
+                ed1[it1] = (x1, max(h1, h2))
                 ult_h1 = h1
                 ult_h2 = h2
                 it1 += 1
                 it2 += 1
-                if it1 != len(ed1): (x1, h1) = ed1[it1]
-                if it2 != len(ed2): (x2, h2) = ed2[it2]
+                if it1 != len(ed1):
+                    (x1, h1) = ed1[it1]
+                if it2 != len(ed2):
+                    (x2, h2) = ed2[it2]
 
             elif x1 < x2:
                 if h1 > ult_h1:
@@ -180,12 +184,13 @@ class Skyline:
                         it1 += 1
 
                 ult_h1 = h1
-                if it1 != len(ed1): (x1, h1) = ed1[it1]
+                if it1 != len(ed1):
+                    (x1, h1) = ed1[it1]
 
             else:
                 if h2 > ult_h2:
                     if h2 > ult_h1:
-                        ed1.insert(it1, (x2,h2))
+                        ed1.insert(it1, (x2, h2))
                         it1 += 1
 
                 else:
@@ -199,7 +204,8 @@ class Skyline:
 
                 it2 += 1
                 ult_h2 = h2
-                if it2 != len(ed2): (x2, h2) = ed2[it2]
+                if it2 != len(ed2):
+                    (x2, h2) = ed2[it2]
 
         if it1 == len(ed1) and it2 != len(ed2):
             ed1 += ed2[it2:]
@@ -303,11 +309,11 @@ class Skyline:
         return max([e[1] for e in self.edificis])
 
 
-def main():    
+def main():
     sk1 = Skyline()
-    sk2 = Skyline(1,2,3)
-    sk3 = Skyline([(0,3,1),(1,1,2),(3,3,4)])
-    sk4 = Skyline(10000,20,3,1,10000)
+    sk2 = Skyline(1, 2, 3)
+    sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
+    sk4 = Skyline(10000, 20, 3, 1, 10000)
     start1 = time.time()
     end1 = time.time()
     print(end1 - start1)
