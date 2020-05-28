@@ -1,81 +1,72 @@
-# importa l'API de Telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram import ParseMode
-
 import sys
+import traceback
+
 from antlr4 import *
+from antlr4.error.ErrorListener import ErrorListener
+
+from telegram import ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+from Skyline import Skyline
 from cl.SkylineLexer import SkylineLexer
 from cl.SkylineParser import SkylineParser
 from cl.EvalVisitor import EvalVisitor
-from antlr4.error.ErrorListener import ErrorListener
 
-from Skyline import Skyline
-import matplotlib.pyplot as plt
 import pickle
+import matplotlib.pyplot as plt
 
-import traceback
 
-# defineix una funció que saluda i que s'executarà quan el bot rebi el missatge /start
 def start(update, context):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Benvingut a SkyLineBot!\n" +
-            "Usa /help per veure les comandes disponibles.")
+    text = "Benvingut a SkyLineBot!\n" \
+        + "Usa /help per veure les comandes disponibles."
+    sortida(update, context, text)
 
 
 def help(update, context):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="Soc un bot amb les següents comandes:\n" +
-            "/start: inicia la conversa amb el Bot\n" +
-            "/author: escriu el nom i correu de l'autor\n" +
-            "/lst: mostra els identificadors definits i la seva corresponent àrea\n" +
-            "/clean: esborra tots els identificadors definits\n" +
-            "/save id: guarda un skyline amb el nom id.sky\n" +
-            "/load id: carrega un skyline de l’arxiu id.sky"
-    )
+    text = "Sóc un bot amb les següents comandes:\n" \
+        + "/start: inicia la conversa amb el Bot\n" \
+        + "/author: escriu el nom i correu de l'autor\n" \
+        + "/lst: mostra els identificadors definits i " \
+        + "la seva corresponent àrea\n" \
+        + "/clean: esborra tots els identificadors definits\n" \
+        + "/save id: guarda un skyline amb el nom id.sky\n" \
+        + "/load id: carrega un skyline de l’arxiu id.sky"
+    sortida(update, context, text)
 
 
 def author(update, context):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="SkylineBot\n" +
-            "Autor: Jordi Cluet Martinell\n" +
-            "Correu: jordi.cluet@upc.edu"
-    )
+    text = "SkylineBot (@SkyLine4Bot)\n" \
+        + "Autor: Jordi Cluet Martinell\n" \
+        + "Correu: jordi.cluet@upc.edu"
+    sortida(update, context, text)
 
 
 def lst(update, context):
-    
-    if 'visitor' not in context.user_data:
-        context.user_data['visitor'] = EvalVisitor()
 
-    skys = context.user_data['visitor'].taula_simbols
+    skys = context.user_data['visitor'].taula_simbols \
+        if 'visitor' in context.user_data else {}
+
     if not skys:
-        context.bot.send_message(
-            chat_id = update.effective_chat.id,
-            text = "No hi ha cap identificador definit")
+        text = "No hi ha cap identificador definit"
     else:
-        msg = "id -> àrea"
+        text = "id -> àrea"
         for id, sky in skys.items():
-            msg += "\n" + id + " -> " + str(sky.area())
-        context.bot.send_message(
-            chat_id = update.effective_chat.id,
-            text = msg)
+            text += "\n" + id + " -> " + str(sky.area())
+
+    sortida(update, context, text)
 
 
 def clean(update, context):
     if 'visitor' in context.user_data:
         context.user_data['visitor'].taula_simbols = {}
-    context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text = "Identificadors eliminats")
+    text = "Identificadors eliminats"
+    sortida(update, context, text)
 
 
 def sortida(update, context, text):
     context.bot.send_message(
-        chat_id = update.effective_chat.id,
-        text = text
+        chat_id=update.effective_chat.id,
+        text=text
     )
 
 
@@ -84,16 +75,19 @@ def load(update, context):
     nom = id + ".sky"
 
     try:
-        sky = read_pickle(nom)
+        sky = llegeix_pickle(nom)
         if 'visitor' not in context.user_data:
             context.user_data['visitor'] = EvalVisitor()
         context.user_data['visitor'].taula_simbols[id] = sky
         text = "Skyline " + id + " carregat"
-        sortida(update, context, text)
 
     except FileNotFoundError:
         text = "El fitxer " + nom + " no existeix"
-        sortida(update, context, text)
+
+    except Exception:
+        text = "Error en carregar l'Skyline. Comprova la terminal"
+
+    sortida(update, context, text)
 
 
 def save(update, context):
@@ -105,7 +99,7 @@ def save(update, context):
         if id in simbols:
             sky = simbols[id]
             nom = id + ".sky"
-            write_pickle(sky, nom)
+            escriu_pickle(sky, nom)
             text = "Skyline guardat com a " + nom
             sortida(update, context, text)
             return
@@ -114,15 +108,15 @@ def save(update, context):
     sortida(update, context, text)
 
 
-def read_pickle(filename: str):
-    """Read object from pickle file."""
-    with open(filename, "rb") as file:
+def llegeix_pickle(fitxer: str):
+    """Llegeix un objecte d'un fitxer pickle."""
+    with open(fitxer, "rb") as file:
         return pickle.load(file)
 
 
-def write_pickle(obj: object, filename: str):
-    """Save object in pickle file."""
-    with open(filename, "wb") as file:
+def escriu_pickle(obj: object, fitxer: str):
+    """Guarda un objecte en un fitxer pickle."""
+    with open(fitxer, "wb") as file:
         return pickle.dump(obj, file)
 
 
@@ -138,13 +132,13 @@ def genera_grafic(sk: Skyline):
             hs.append(e1[1])
             ws.append(e2[0] - e1[0])
         e1 = e2
-    
+
     plt.bar(xs, hs, width=ws, align='edge', color=['red'])
     plt.savefig('plot.png')
     plt.close()
 
 
-class MyErrorListener( ErrorListener ):
+class MyErrorListener(ErrorListener):
 
     def __init__(self):
         super(MyErrorListener, self).__init__()
@@ -163,7 +157,7 @@ class MyErrorListener( ErrorListener ):
 
 
 def entrada(update, context):
-    
+
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
@@ -175,7 +169,8 @@ def entrada(update, context):
     try:
         tree = parser.root()
     except Exception as err:
-        context.bot.send_message(chat_id = update.effective_chat.id, text = "Error en parsejar l'expressió. Comprova la terminal")
+        text = "Error en parsejar l'expressió. Comprova la terminal."
+        sortida(update, context, text)
         raise
 
     try:
@@ -184,26 +179,25 @@ def entrada(update, context):
         (var, sk) = context.user_data['visitor'].visit(tree)
         genera_grafic(sk)
 
+        context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
+        sortida(update, context, text = ("area: " + str(sk.area())))
+        sortida(update, context, text = "alçada: " + str(sk.alcada()))
+
+        # print("Var: ", var)
+        # print("Nombre d'edificis: ", len(sk.edificis))
+        # print("Edificis: ", sk.edificis)
+
     except KeyError:
-        context.bot.send_message(chat_id = update.effective_chat.id, text = "Aquest identificador no existeix")
-        raise
+        text = "Aquest identificador no existeix."
     except TypeError:
-        context.bot.send_message(chat_id = update.effective_chat.id, text = "Error de tipus: operació no suportada")
-        raise
+        text = "Error de tipus: operació no suportada."
     except Exception as err:
-        context.bot.send_message(chat_id = update.effective_chat.id, text = "Hi ha hagut una excepció. Comprova la terminal")
+        text = "Hi ha hagut una excepció. Comprova la terminal."
         print(traceback.format_exc())
         print(sys.exc_info())
-        raise
 
-    # print("Var: ", var)
-    # print("Nombre d'edificis: ", len(sk.edificis))
-    # print("Edificis: ", sk.edificis)
+    sortida(update, context, text)
 
-    context.bot.send_photo(chat_id = update.message.chat_id, photo = open('plot.png', 'rb'))
-    context.bot.send_message(chat_id = update.effective_chat.id, text = ("area: " + str(sk.area())))
-    context.bot.send_message(chat_id = update.effective_chat.id, text = "alçada: " + str(sk.alcada()))
-    
 
 # declara una constant amb el access token que llegeix de token.txt
 TOKEN = open('token.txt').read().strip()
@@ -219,7 +213,6 @@ dispatcher.add_handler(CommandHandler('lst', lst))
 dispatcher.add_handler(CommandHandler('clean', clean))
 dispatcher.add_handler(CommandHandler('load', load))
 dispatcher.add_handler(CommandHandler('save', save))
-
 
 updater.dispatcher.add_handler(MessageHandler(Filters.text, entrada))
 
