@@ -3,6 +3,19 @@ import matplotlib.pyplot as plt
 import random
 import time
 
+count = 0
+
+def unio_rec(skylines):
+    if len(skylines) == 1:
+        return skylines[0]
+    if len(skylines) == 2:
+        skylines[0].unio(skylines[1])
+        return skylines[0]
+    
+    sk1 = unio_rec(skylines[:len(skylines)//2])
+    sk2 = unio_rec(skylines[len(skylines)//2:])
+    sk1.unio(sk2)
+    return sk1
 
 class Skyline:
 
@@ -41,7 +54,7 @@ class Skyline:
             raise Exception
 
         skylines = []
-
+        
         for i in range(n):
             alt = random.randint(0, h)
             esq = ampl = xmax
@@ -51,12 +64,9 @@ class Skyline:
                 dreta = esq + ampl
             skylines += [Skyline(esq, alt, esq+w)]
 
-        self.edificis = []
-        for sk in skylines:
-            if not self.edificis:
-                self.edificis = sk.edificis
-            else:
-                self.edificis = self.unio(sk).edificis
+        aux = unio_rec(skylines)
+        self.edificis = aux.edificis
+    
 
     def __mul__(self, other):
         if isinstance(other, self.__class__):
@@ -126,66 +136,83 @@ class Skyline:
 
         ed1 = self.edificis
         ed2 = sky2.edificis
-        res = []
+        #res = []
 
         if not ed1:
-            nou_sky = Skyline()
-            nou_sky.edificis = ed2
-            return nou_sky
-
+            self.edificis = ed2
+            return
         if not ed2:
-            nou_sky = Skyline()
-            nou_sky.edificis = ed1
-            return nou_sky
+            self.edificis = ed1
+            return
 
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0
+        (x1, h1) = ed1[it1]
+        (x2, h2) = ed2[it2]
 
         while it1 != len(ed1) and it2 != len(ed2):
-            (x1, h1) = ed1[it1]
-            (x2, h2) = ed2[it2]
+            global count
+            count+=1
 
             if x1 == x2:
-                res.append((x1, max(h1, h2)))
+                ed1[it1] = (x1, max(h1,h2))
+                #res.append((x1, max(h1, h2)))
                 ult_h1 = h1
                 ult_h2 = h2
                 it1 += 1
                 it2 += 1
+                if it1 != len(ed1): (x1, h1) = ed1[it1]
+                if it2 != len(ed2): (x2, h2) = ed2[it2]
 
             elif x1 < x2:
-                if h1 > ult_h1:
-                    if h1 > ult_h2:
-                        res.append((x1, h1))
-                else:
-                    if h1 > ult_h2:
-                        res.append((x1, h1))
-                    elif ult_h1 > ult_h2:
-                        res.append((x1, ult_h2))
+                if h1 > ult_h1:  # ed1 puja
+                    if h1 < ult_h2:  # ed1 per sota d'ed2
+                        del ed1[it1]  # elimino l'ed1
+                    else:
+                        it1 += 1
+
+                else:  # ed1 baixa
+                    if h1 < ult_h2:  # ed1 per sota d'ed2
+                        if ult_h1 > ult_h2:
+                            ed1[it1] = (x1, ult_h2)
+                            it1 += 1
+                        else:
+                            del ed1[it1]
+                    else:
+                        it1 += 1
+
                 ult_h1 = h1
-                it1 += 1
+                if it1 != len(ed1): (x1, h1) = ed1[it1]
 
             else:
-                if h2 > ult_h2:
-                    if h2 > ult_h1:
-                        res.append((x2, h2))
-                else:
-                    if h2 > ult_h1:
-                        res.append((x2, h2))
-                    elif ult_h2 > ult_h1:
-                        res.append((x2, ult_h1))
-                ult_h2 = h2
+                if h2 > ult_h2:  # ed2 puja
+                    if h2 > ult_h1:  # ed2 per sobre d'ed1
+                        ed1.insert(it1, (x2,h2))  # afegeixo ed2
+                        it1 += 1
+
+                else:  # ed2 baixa
+                    if h2 < ult_h1:  # ed2 per sota d'ed1
+                        if ult_h2 > ult_h1:
+                            ed1.insert(it1, (x2, ult_h1))
+                            it1 += 1
+                    else:
+                        ed1.insert(it1, (x2, h2))
+                        it1 += 1
+
                 it2 += 1
+                ult_h2 = h2
+                if it2 != len(ed2): (x2, h2) = ed2[it2]
 
         if it1 == len(ed1) and it2 != len(ed2):
-            res += ed2[it2:]
-        elif it2 == len(ed2) and it1 != len(ed1):
-            res += ed1[it1:]
+            ed1 += ed2[it2:]
+        # elif it2 == len(ed2) and it1 != len(ed1):
+        #     res += ed1[it1:]
 
-        res[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
+        #ed1[-1] = ((max(ed1[-1][0], ed2[-1][0]), 0))
 
-        nou_sky = Skyline()
-        nou_sky.edificis = res
-        return nou_sky
+        # nou_sky = Skyline()
+        # nou_sky.edificis = res
+        # return self
 
     def interseccio(self, sky2):
 
@@ -287,17 +314,34 @@ def main():
     # sk0.mostra()
     # sk1 = Skyline(1,2,3)
     # sk1.mostra()
-    sk2 = Skyline([(1, 2, 3), (3, 4, 6), (10, 5, 12)])
-    sk2.mostra()
-    sk3 = -sk2
-    sk3.mostra()
-    # start = time.time()
-    # sk3 = Skyline(100000,20,3,1,10000)
-    # end = time.time()
+    # sk1 = Skyline(4,3,6)
+    # print(sk1.edificis)
+    # sk1.mostra()
+    # sk2 = Skyline(1,4,10)
+    # print(sk2.edificis)
+    # sk2.mostra()
+    # sk1.unio(sk2)
+    # print(sk1.edificis)
+    # sk1.mostra()
+    # sk3 = -sk2
     # sk3.mostra()
-    # end2 = time.time()
-    # print(end - start)
-    # print(end2 - start)
+    start1 = time.time()
+    sk1 = Skyline(100000,20,3,1,10000)
+    end1 = time.time()
+    print(len(sk1.edificis))
+    print(end1 - start1)
+    print(sk1.edificis[:100])
+    sk1.mostra()
+    #start2 = time.time()
+    #sk2 = Skyline(10000,20,3,1,10000)
+    #end2 = time.time()
+    #start3 = time.time()
+    #sk1.unio(sk2)
+    #end3 = time.time()
+    # print(end1 - start1)
+    #print(end2 - start2)
+    #print(end3 - start3)
+    print(count)
 
     # sk1 = Skyline(1,2,3)
     # sk2 = Skyline(2,3,4)
