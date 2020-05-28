@@ -304,52 +304,15 @@ class Skyline:
         return max([e[1] for e in self.edificis])
 
 
-def main():
-    # sk0 = Skyline()
-    # sk0.mostra()
-    # sk1 = Skyline(1,2,3)
-    # sk1.mostra()
-    # sk1 = Skyline(4,3,6)
-    # print(sk1.edificis)
-    # sk1.mostra()
-    # sk2 = Skyline(1,4,10)
-    # print(sk2.edificis)
-    # sk2.mostra()
-    # sk1.unio(sk2)
-    # print(sk1.edificis)
-    # sk1.mostra()
-    # sk3 = -sk2
-    # sk3.mostra()
-    
+def main():    
     sk1 = Skyline()
-    sk2 = Skyline(2,3,4)
+    sk2 = Skyline(1,2,3)
+    sk3 = Skyline([(0,3,1),(1,1,2),(3,3,4)])
+    sk4 = Skyline(10000,20,3,1,10000)
     start1 = time.time()
-    sk3 = sk1+sk2
-    # sk1 = Skyline([(0,3,1),(1,1,2),(3,3,4)])
     end1 = time.time()
     print(end1 - start1)
-    sk3.mostra()
-    # sk2 = Skyline(10000,20,3,1,10000)
-    # end2 = time.time()
-    # start3 = time.time()
-    # sk1.unio(sk2)
-    # end3 = time.time()
-    # print(end1 - start1)
-    # print(end2 - start2)
-    # print(end3 - start3)
-    # sk1 = Skyline(1,2,3)
-    # sk2 = Skyline(2,3,4)
-    # sk3 = Skyline(2,1,6)
-    # sk4 = Skyline(9,1,12)
-    # sk5 = Skyline(-3,1,-2)
-    # sk1 = sk1.unio(sk2)
-    # sk1 = sk1.unio(sk3)
-    # sk1 = sk1.unio(sk4)
-    # sk1 = sk1.unio(sk5)
-    # sk1 = sk0.interseccio(sk1)
-    # print(sk1.area())
-    # print(sk1.alcada())
-
+    
 
 if __name__ == "__main__":
     main()
