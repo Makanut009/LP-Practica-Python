@@ -1,11 +1,11 @@
 # SkylineBot - Pràctica de Python
 
-Dpcumentació de l'SkylineBot fet per a la Pràctica de Python de l'assignatura
-de Llenguatges de Programació de la Facultat d'Informàtica de Barcelona.
+Documentació de la Pràctica de Python de l'assignatura de Llenguatges de Programació. 
+Facultat d'Informàtica de Barcelona, UPC. Juny de 2020.
 
 ### Prerequisits
 
-Perquè el bot funcioni cal tenir instal·lats els paquets que es detallen al fitxer requirements.txt.
+Perquè el bot funcioni cal tenir instal·lats els paquets que es detallen al fitxer ```requirements.txt```.
 Es poden instal·lar mitjançant pip3:
 ```bash
 $ pip3 install -r requirements.txt
@@ -14,7 +14,7 @@ A més, cal tenir instal·lat Telegram en algun dispositiu.
 
 ### Execució
 
-Per córrer el bot tan sols cal executar ```python3 bot.py``` des del directori arrel.
+Per córrer el bot cal executar ```python3 bot.py``` des del directori arrel.
 Un cop fet això, tan sols cal enviar missatges al bot (usuari @SkyLine4Bot) mitjançant Telegram, seguint les pautes que es detallen a l'enunciat.
 
 ### Detalls de la implementació
