@@ -136,14 +136,16 @@ class Skyline:
 
         ed1 = self.edificis.copy()
         ed2 = sky2.edificis
-        #res = []
 
         if not ed1:
-            self.edificis = ed2
-            return
+            nou_sky = Skyline()
+            nou_sky.edificis = ed2
+            return nou_sky
+            
         if not ed2:
-            self.edificis = ed1
-            return
+            nou_sky = Skyline()
+            nou_sky.edificis = ed1
+            return nou_sky
 
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0
@@ -154,7 +156,6 @@ class Skyline:
 
             if x1 == x2:
                 ed1[it1] = (x1, max(h1,h2))
-                #res.append((x1, max(h1, h2)))
                 ult_h1 = h1
                 ult_h2 = h2
                 it1 += 1
@@ -163,14 +164,14 @@ class Skyline:
                 if it2 != len(ed2): (x2, h2) = ed2[it2]
 
             elif x1 < x2:
-                if h1 > ult_h1:  # ed1 puja
-                    if h1 < ult_h2:  # ed1 per sota d'ed2
-                        del ed1[it1]  # elimino l'ed1
+                if h1 > ult_h1:
+                    if h1 < ult_h2:
+                        del ed1[it1]
                     else:
                         it1 += 1
 
-                else:  # ed1 baixa
-                    if h1 < ult_h2:  # ed1 per sota d'ed2
+                else:
+                    if h1 < ult_h2:
                         if ult_h1 > ult_h2:
                             ed1[it1] = (x1, ult_h2)
                             it1 += 1
@@ -183,13 +184,13 @@ class Skyline:
                 if it1 != len(ed1): (x1, h1) = ed1[it1]
 
             else:
-                if h2 > ult_h2:  # ed2 puja
-                    if h2 > ult_h1:  # ed2 per sobre d'ed1
-                        ed1.insert(it1, (x2,h2))  # afegeixo ed2
+                if h2 > ult_h2:
+                    if h2 > ult_h1:
+                        ed1.insert(it1, (x2,h2))
                         it1 += 1
 
-                else:  # ed2 baixa
-                    if h2 < ult_h1:  # ed2 per sota d'ed1
+                else:
+                    if h2 < ult_h1:
                         if ult_h2 > ult_h1:
                             ed1.insert(it1, (x2, ult_h1))
                             it1 += 1
@@ -319,12 +320,15 @@ def main():
     # sk1.mostra()
     # sk3 = -sk2
     # sk3.mostra()
+    
+    sk1 = Skyline()
+    sk2 = Skyline(2,3,4)
     start1 = time.time()
-    sk1 = Skyline(100000,20,3,1,10000)
+    sk3 = sk1+sk2
     # sk1 = Skyline([(0,3,1),(1,1,2),(3,3,4)])
     end1 = time.time()
     print(end1 - start1)
-    sk1.mostra()
+    sk3.mostra()
     # sk2 = Skyline(10000,20,3,1,10000)
     # end2 = time.time()
     # start3 = time.time()
