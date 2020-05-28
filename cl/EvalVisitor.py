@@ -14,30 +14,24 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#root.
     def visitRoot(self, ctx: SkylineParser.RootContext):
-        r = self.visit(next(ctx.getChildren()))
-        return r
+        return self.visit(next(ctx.getChildren()))
 
     # Visit a parse tree produced by SkylineParser#instruccio.
     def visitInstruccio(self, ctx: SkylineParser.InstruccioContext):
-        if next(ctx.getChildren()) == ctx.assig():
-            return self.visit(next(ctx.getChildren()))
-        else:
-            return (None, self.visit(next(ctx.getChildren())))
+        ch = next(ctx.getChildren())
+        return self.visit(ch) if ch == ctx.assig() else (None, self.visit(ch))
 
     # Visit a parse tree produced by SkylineParser#assig.
     def visitAssig(self, ctx: SkylineParser.AssigContext):
-        res = self.visit(ctx.expr())
-        self.taula_simbols[ctx.VAR().getText()] = res
-        return (ctx.VAR().getText(), res)
+        ident = ctx.VAR().getText()
+        valor = self.visit(ctx.expr())
+        self.taula_simbols[ident] = res
+        return (ident, res)
 
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx: SkylineParser.ExprContext):
         if ctx.getChildCount() == 1:
             return self.visit(next(ctx.getChildren()))
-            # ch = next(ctx.getChildren())
-            # if ch == ctx.simbol():
-            #     return self.visit(ctx.simbol())
-            # elif ch == ctx.simbol():
 
         elif ctx.getChildCount() == 2:
             return - self.visit(ctx.simbol())
@@ -46,20 +40,21 @@ class EvalVisitor(ParseTreeVisitor):
             g = ctx.getChildren()
             l = [next(g) for i in range(3)]
 
+            # Parèntesi
             if isinstance(l[0], tree.Tree.TerminalNode):
                 return self.visit(l[1])
 
+            # Intersecció / Replicació
             elif l[1].getSymbol().type == SkylineParser.PER:
-                sk = self.visit(l[0]) * self.visit(l[2])
-                return sk
+                return self.visit(l[0]) * self.visit(l[2])
 
+            # Unió / Desplaçament dreta
             elif l[1].getSymbol().type == SkylineParser.MES:
-                sk = self.visit(l[0]) + self.visit(l[2])
-                return sk
+                return self.visit(l[0]) + self.visit(l[2])
 
+            # Desplaçament esquerra
             elif l[1].getSymbol().type == SkylineParser.MENYS:
-                sk = self.visit(l[0]) - self.visit(l[2])
-                return skç
+                return self.visit(l[0]) - self.visit(l[2])
 
     # Visit a parse tree produced by SkylineParser#simbol.
     def visitSimbol(self, ctx: SkylineParser.SimbolContext):
