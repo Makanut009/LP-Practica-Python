@@ -72,16 +72,28 @@ def clean(update, context):
         text = "Identificadors eliminats")
 
 
+def sortida(update, context, text):
+    context.bot.send_message(
+        chat_id = update.effective_chat.id,
+        text = text
+    )
+
+
 def load(update, context):
     id = ' '.join(context.args)
+    nom = id + ".sky"
 
-    sky = read_pickle(id + ".sky")
-    if 'visitor' not in context.user_data:
-        context.user_data['visitor'] = EvalVisitor()
-    context.user_data['visitor'].taula_simbols[id] = sky
-    context.bot.send_message(
-                chat_id = update.effective_chat.id,
-                text = "Skyline carregat")
+    try:
+        sky = read_pickle(nom)
+        if 'visitor' not in context.user_data:
+            context.user_data['visitor'] = EvalVisitor()
+        context.user_data['visitor'].taula_simbols[id] = sky
+        text = "Skyline " + id + " carregat"
+        sortida(update, context, text)
+
+    except FileNotFoundError:
+        text = "El fitxer " + nom + " no existeix"
+        sortida(update, context, text)
 
 
 def save(update, context):
@@ -94,15 +106,12 @@ def save(update, context):
             sky = simbols[id]
             nom = id + ".sky"
             write_pickle(sky, nom)
-            context.bot.send_message(
-                chat_id = update.effective_chat.id,
-                text = "Skyline guardat com a " + nom)
+            text = "Skyline guardat com a " + nom
+            sortida(update, context, text)
             return
 
-    context.bot.send_message(
-        chat_id = update.effective_chat.id,
-        text = "Aquest identificador no existeix")
-
+    text = "Aquest identificador no existeix"
+    sortida(update, context, text)
 
 
 def read_pickle(filename: str):
@@ -117,7 +126,7 @@ def write_pickle(obj: object, filename: str):
         return pickle.dump(obj, file)
 
 
-def genera_grafic(sk):
+def genera_grafic(sk: Skyline):
     xs = []
     hs = []
     ws = []
@@ -153,7 +162,7 @@ class MyErrorListener( ErrorListener ):
         raise Exception
 
 
-def missatge(update, context):
+def entrada(update, context):
     
     input_stream = InputStream(update.message.text)
     lexer = SkylineLexer(input_stream)
@@ -212,7 +221,7 @@ dispatcher.add_handler(CommandHandler('load', load))
 dispatcher.add_handler(CommandHandler('save', save))
 
 
-updater.dispatcher.add_handler(MessageHandler(Filters.text, missatge))
+updater.dispatcher.add_handler(MessageHandler(Filters.text, entrada))
 
 # engega el bot
 updater.start_polling()
