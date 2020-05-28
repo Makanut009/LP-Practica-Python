@@ -26,7 +26,7 @@ random: '{' NUM ',' NUM ',' NUM ',' NUM ',' NUM '}';
 LPAREN: '(';
 RPAREN: ')';
 VAR: [a-z] ([a-z] | [0-9])*;
-NUM : [0-9]+;
+NUM : '-'? [0-9]+;
 PER : '*';
 MES : '+';
 MENYS : '-';
