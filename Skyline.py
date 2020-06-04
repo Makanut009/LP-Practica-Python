@@ -110,22 +110,18 @@ class Skyline:
         ed1 = self.edificis.copy()
         ed2 = sky2.edificis
 
-        if not ed1:  # Si el primer skyline és buit
+        if not ed1 or not ed2:  # Si alguns dels sjylines és buit
             nou_sky = Skyline()
-            nou_sky.edificis = ed2
-            return nou_sky
-
-        if not ed2:  # Si el segon skyline és buit
-            nou_sky = Skyline()
-            nou_sky.edificis = ed1
+            nou_sky.edificis = ed2 if not ed1 else ed1
             return nou_sky
 
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0  # Darrera alçada llegida de cada skyline
-        (x1, h1) = ed1[it1]
-        (x2, h2) = ed2[it2]
 
         while it1 != len(ed1) and it2 != len(ed2):
+
+            (x1, h1) = ed1[it1]
+            (x2, h2) = ed2[it2]
 
             if x1 == x2:  # Si els dos edificis tenen la mateixa x
                 ed1[it1] = (x1, max(h1, h2))
@@ -133,10 +129,6 @@ class Skyline:
                 ult_h2 = h2
                 it1 += 1
                 it2 += 1
-                if it1 != len(ed1):
-                    (x1, h1) = ed1[it1]
-                if it2 != len(ed2):
-                    (x2, h2) = ed2[it2]
 
             elif x1 < x2:
                 if h1 >= ult_h2:
@@ -147,8 +139,6 @@ class Skyline:
                 else:
                     del ed1[it1]
                 ult_h1 = h1
-                if it1 != len(ed1):
-                    (x1, h1) = ed1[it1]
 
             else:
                 if h2 > ult_h1:
@@ -159,8 +149,6 @@ class Skyline:
                     it1 += 1
                 it2 += 1
                 ult_h2 = h2
-                if it2 != len(ed2):
-                    (x2, h2) = ed2[it2]
 
         if it1 == len(ed1) and it2 != len(ed2):
             ed1 += ed2[it2:]
@@ -289,66 +277,66 @@ def unio_rec(skylines):
 
 def main():
 
-    # sk1 = Skyline(1,1,2)
-    # sk2 = Skyline(3,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,2)
+    sk2 = Skyline(3,2,4)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(3,2,4)
-    # sk2 = Skyline(1,1,2)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(3,2,4)
+    sk2 = Skyline(1,1,2)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,3)
-    # sk2 = Skyline(1,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,3)
+    sk2 = Skyline(1,2,4)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,2,4)
-    # sk2 = Skyline(2,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,2,4)
+    sk2 = Skyline(2,1,3)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(2,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,3)
+    sk2 = Skyline(2,2,4)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,2,3)
-    # sk2 = Skyline(2,1,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,2,3)
+    sk2 = Skyline(2,1,4)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,2,4)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,2,4)
+    sk2 = Skyline(1,1,3)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,4)
-    # sk2 = Skyline(1,2,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,4)
+    sk2 = Skyline(1,2,3)
+    skn = sk1.unio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
 
     # #sk1 = Skyline()
     # sk2 = Skyline(1, 2, 3)
     # sk3 = Skyline(2,3,4)
     # #sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
-    # #sk4 = Skyline(100000, 20, 3, 1, 10000)
+    sk4 = Skyline(100000, 20, 3, 1, 10000)
     # #sk5 = Skyline(5, 10, 3, 0, 100)
     # start1 = time.time()
     # #sk4 = Skyline(100000, 20, 3, 1, 10000)
     # skn = sk2.unio(sk3)
     # end1 = time.time()
-    # skn.mostra()
+    sk4.mostra()
     # print(end1 - start1)
 
 
