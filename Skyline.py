@@ -81,6 +81,7 @@ class Skyline:
     def random(self, n, h, w, xmin, xmax):
         """Genera un skyline a partir d'n edificis generats aleatòriament"""
         if n < 1 or h < 0 or w < 1 or xmax <= xmin:
+            print("Paràmetres per a la generació aleatòria incorrectes")
             raise Exception
         skylines = [next(rg(h, w, xmin, xmax)) for _ in range(n)]
         self.edificis = (unio_rec(skylines)).edificis
@@ -109,24 +110,24 @@ class Skyline:
         ed1 = self.edificis.copy()
         ed2 = sky2.edificis
 
-        if not ed1:
+        if not ed1:  # Si el primer skyline és buit
             nou_sky = Skyline()
             nou_sky.edificis = ed2
             return nou_sky
 
-        if not ed2:
+        if not ed2:  # Si el segon skyline és buit
             nou_sky = Skyline()
             nou_sky.edificis = ed1
             return nou_sky
 
         it1 = it2 = 0
-        ult_h1 = ult_h2 = 0
+        ult_h1 = ult_h2 = 0  # Darrera alçada llegida de cada skyline
         (x1, h1) = ed1[it1]
         (x2, h2) = ed2[it2]
 
         while it1 != len(ed1) and it2 != len(ed2):
 
-            if x1 == x2:
+            if x1 == x2:  # Si els dos edificis tenen la mateixa x
                 ed1[it1] = (x1, max(h1, h2))
                 ult_h1 = h1
                 ult_h2 = h2
@@ -138,41 +139,24 @@ class Skyline:
                     (x2, h2) = ed2[it2]
 
             elif x1 < x2:
-                if h1 > ult_h1:
-                    if h1 < ult_h2:
-                        del ed1[it1]
-                    else:
-                        it1 += 1
-
+                if h1 >= ult_h2:
+                    it1 += 1
+                elif ult_h1 > ult_h2:
+                    ed1[it1] = (x1, ult_h2)
+                    it1 += 1
                 else:
-                    if h1 < ult_h2:
-                        if ult_h1 > ult_h2:
-                            ed1[it1] = (x1, ult_h2)
-                            it1 += 1
-                        else:
-                            del ed1[it1]
-                    else:
-                        it1 += 1
-
+                    del ed1[it1]
                 ult_h1 = h1
                 if it1 != len(ed1):
                     (x1, h1) = ed1[it1]
 
             else:
-                if h2 > ult_h2:
-                    if h2 > ult_h1:
-                        ed1.insert(it1, (x2, h2))
-                        it1 += 1
-
-                else:
-                    if h2 < ult_h1:
-                        if ult_h2 > ult_h1:
-                            ed1.insert(it1, (x2, ult_h1))
-                            it1 += 1
-                    else:
-                        ed1.insert(it1, (x2, h2))
-                        it1 += 1
-
+                if h2 > ult_h1:
+                    ed1.insert(it1, (x2, h2))
+                    it1 += 1
+                elif ult_h2 > ult_h1:
+                    ed1.insert(it1, (x2, ult_h1))
+                    it1 += 1
                 it2 += 1
                 ult_h2 = h2
                 if it2 != len(ed2):
@@ -276,6 +260,8 @@ class Skyline:
         return max([e[1] for e in self.edificis])
 
 
+### FUNCIONS AUXILIARS ###
+
 def rg(h, w, xmin, xmax):
     """Generador aleatori d'skylines"""
     while True:
@@ -302,16 +288,68 @@ def unio_rec(skylines):
 
 
 def main():
-    #sk1 = Skyline()
-    #sk2 = Skyline(1, 2, 3)
-    #sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
-    #sk4 = Skyline(10000, 20, 3, 1, 10000)
-    #sk5 = Skyline(5, 10, 3, 0, 100)
-    start1 = time.time()
-    sk4 = Skyline(100000, 20, 3, 1, 10000)
-    end1 = time.time()
-    sk4.mostra()
-    print(end1 - start1)
+
+    # sk1 = Skyline(1,1,2)
+    # sk2 = Skyline(3,2,4)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(3,2,4)
+    # sk2 = Skyline(1,1,2)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(2,1,3)
+    # sk2 = Skyline(1,2,4)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(1,2,4)
+    # sk2 = Skyline(2,1,3)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(1,1,3)
+    # sk2 = Skyline(2,2,4)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(1,2,3)
+    # sk2 = Skyline(2,1,4)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(2,2,4)
+    # sk2 = Skyline(1,1,3)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+    # sk1 = Skyline(2,1,4)
+    # sk2 = Skyline(1,2,3)
+    # skn = sk1.unio(sk2)
+    # print(skn.edificis)
+    # skn.mostra()
+
+
+    # #sk1 = Skyline()
+    # sk2 = Skyline(1, 2, 3)
+    # sk3 = Skyline(2,3,4)
+    # #sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
+    # #sk4 = Skyline(100000, 20, 3, 1, 10000)
+    # #sk5 = Skyline(5, 10, 3, 0, 100)
+    # start1 = time.time()
+    # #sk4 = Skyline(100000, 20, 3, 1, 10000)
+    # skn = sk2.unio(sk3)
+    # end1 = time.time()
+    # skn.mostra()
+    # print(end1 - start1)
 
 
 if __name__ == "__main__":
