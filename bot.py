@@ -182,15 +182,18 @@ def entrada(update, context):
 
         (var, sk) = visitor.visit(tree)
 
-        genera_grafic(sk)
-        context.bot.send_photo(
-            chat_id=update.message.chat_id,
-            photo=open('tmp.png', 'rb')
-        )
-        os.remove("tmp.png")
+        if sk.edificis:
+            genera_grafic(sk)
+            context.bot.send_photo(
+                chat_id=update.message.chat_id,
+                photo=open('tmp.png', 'rb')
+            )
+            os.remove("tmp.png")
 
-        sortida(update, context, "Àrea: " + str(sk.area()))
-        sortida(update, context, "Alçada: " + str(sk.alcada()))
+            sortida(update, context, "Àrea: " + str(sk.area()))
+            sortida(update, context, "Alçada: " + str(sk.alcada()))
+        else:
+            sortida(update, context, "El resultat és l'skyline buit.")
 
         if var is not None:
             context.user_data['taula_simbols'][var] = sk
