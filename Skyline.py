@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
 import random
-import time
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 
 class Skyline:
@@ -71,7 +71,7 @@ class Skyline:
         return sk
 
     def __str__(self):
-        """Mètode per imprimir els skylines per terminal"""
+        """Mètode per imprimir els edificis de l'skyline per terminal"""
         return str(self.edificis)
 
 
@@ -97,6 +97,8 @@ class Skyline:
                     ws.append(e2[0] - e1[0])
                 e1 = e2
 
+        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
         plt.bar(xs, hs, width=ws, align='edge', color=['red'])
         plt.show()
         plt.close()
@@ -107,7 +109,7 @@ class Skyline:
         ed1 = self.edificis.copy()
         ed2 = sky2.edificis
 
-        if not ed1 or not ed2:  # Si alguns dels sjylines és buit
+        if not ed1 or not ed2:  # Si alguns dels skylines és buit
             nou_sky = Skyline()
             nou_sky.edificis = ed2 if not ed1 else ed1
             return nou_sky
@@ -122,10 +124,10 @@ class Skyline:
 
             if x1 == x2:  # Si els dos edificis tenen la mateixa x
                 if max(h1,h2) == max(ult_h1, ult_h2):
-                    del(ed1[it1])
+                    del(ed1[it1])            # Esborrem l'edifici si l'skyline ja tenia aquesta alçada
                 else:
-                    if h1 < h2:
-                        ed1[it1] = (x1, h2)
+                    if h2 > h1:
+                        ed1[it1] = (x1, h2)  # Augmentem l'alçada de l'edifici
                     it1 += 1
                 ult_h1 = h1
                 ult_h2 = h2
@@ -133,20 +135,20 @@ class Skyline:
 
             elif x1 < x2:  # Si l'ed1 és a l'esquerra de l'ed2
                 if h1 > ult_h2:
-                    it1 += 1
+                    it1 += 1                 # Mantenim l'edifici
                 elif ult_h1 > ult_h2:
-                    ed1[it1] = (x1, ult_h2)
+                    ed1[it1] = (x1, ult_h2)  # Baixem només fins a ult_h2
                     it1 += 1
                 else:
-                    del ed1[it1]
+                    del ed1[it1]             # Esborrem l'edifici
                 ult_h1 = h1
 
             else:  # Si l'ed2 és a l'esquerra de l'ed1
                 if h2 > ult_h1:
-                    ed1.insert(it1, (x2, h2))
+                    ed1.insert(it1, (x2, h2))       # Afegim l'edifici si és més alt
                     it1 += 1
                 elif ult_h2 > ult_h1:
-                    ed1.insert(it1, (x2, ult_h1))
+                    ed1.insert(it1, (x2, ult_h1))   # Baixem només fins a ult_h1
                     it1 += 1
                 it2 += 1
                 ult_h2 = h2
@@ -189,20 +191,20 @@ class Skyline:
 
             elif x1 < x2:  # Si l'ed1 és a l'esquerra de l'ed2
                 if h1 <= ult_h2:
-                    it1 += 1
+                    it1 += 1                 # Mantenim l'edifici
                 elif ult_h1 < ult_h2:
-                    ed1[it1] = (x1, ult_h2)
+                    ed1[it1] = (x1, ult_h2)  # Pugem només fins a ult_h2
                     it1 += 1
                 else:
-                    del ed1[it1]
+                    del ed1[it1]             # Eliminem l'edifici
                 ult_h1 = h1
 
             else:  # Si l'ed2 és a l'esquerra de l'ed1
                 if h2 < ult_h1:
-                    ed1.insert(it1, (x2, h2))
+                    ed1.insert(it1, (x2, h2))       # Afegim l'edifici si és més baix
                     it1 += 1
                 elif ult_h2 < ult_h1:
-                    ed1.insert(it1, (x2, ult_h1))
+                    ed1.insert(it1, (x2, ult_h1))   # Pugem només fins a ult_h1
                     it1 += 1
                 it2 += 1
                 ult_h2 = h2
@@ -378,19 +380,6 @@ def main():
     # skn = sk1+(-3)
     # sk1.mostra()
     # skn.mostra()
-
-    # sk1 = Skyline()
-    # sk2 = Skyline(1, 2, 3)
-    # sk3 = Skyline(2,3,4)
-    #sk4 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
-    #sk4 = Skyline(100000, 20, 3, 1, 10000)
-    # sk4 = Skyline(5, 10, 3, 0, 100)
-    start1 = time.time()
-    skn = -sk4
-    end1 = time.time()
-    sk4.mostra()
-    skn.mostra()
-    print(end1 - start1)
 
 
 if __name__ == "__main__":
