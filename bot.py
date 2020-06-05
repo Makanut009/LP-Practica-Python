@@ -1,6 +1,4 @@
-import sys
 import os
-import traceback
 import pickle
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
@@ -49,24 +47,16 @@ def author(update, context):
 
 def lst(update, context):
     """Mostra els identificadors definits i la seva corresponent àrea."""
-    try:
-        ts = context.user_data['taula_simbols'] \
-            if 'taula_simbols' in context.user_data else {}
+    ts = context.user_data['taula_simbols'] \
+        if 'taula_simbols' in context.user_data else {}
 
-        if not ts:
-            text = "No hi ha cap identificador definit"
-        else:
-            text = "id -> àrea"
-            for id, sky in ts.items():
-                text += "\n" + str(id) + " -> " + str(sky.area())
-        sortida(update, context, text)
-
-    except Exception as err:
-        text = "Hi ha hagut un error. Comprova la terminal."
-        sortida(update, context, text)
-        print(err)
-        # print(traceback.format_exc())
-        # print(sys.exc_info())
+    if not ts:
+        text = "No hi ha cap identificador definit"
+    else:
+        text = "id -> àrea"
+        for id, sky in ts.items():
+            text += "\n" + str(id) + " -> " + str(sky.area())
+    sortida(update, context, text)
 
 
 def clean(update, context):
@@ -111,7 +101,7 @@ def load(update, context):
         text = "El fitxer " + nom + " no existeix"
     except Exception as err:
         text = "Error en carregar l'Skyline. Comprova la terminal"
-        print(err)
+        print("Excepció: " + str(err))
 
     sortida(update, context, text)
 
@@ -213,8 +203,7 @@ def entrada(update, context):
         text = "Error de tipus: operació no suportada."
     except Exception as err:
         text = "Hi ha hagut una excepció. Comprova la terminal."
-        print(traceback.format_exc())
-        print(sys.exc_info())
+        print("Excepció: " + str(err))
 
     sortida(update, context, text)
 
