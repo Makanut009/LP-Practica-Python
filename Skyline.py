@@ -74,7 +74,6 @@ class Skyline:
         """Mètode per imprimir els edificis de l'skyline per terminal"""
         return str(self.edificis)
 
-
     def random(self, n, h, w, xmin, xmax):
         """Genera un skyline a partir d'n edificis generats aleatòriament"""
         if n < 1 or h < 0 or w < 1 or xmax <= xmin:
@@ -123,7 +122,7 @@ class Skyline:
             (x2, h2) = ed2[it2]
 
             if x1 == x2:  # Si els dos edificis tenen la mateixa x
-                if max(h1,h2) == max(ult_h1, ult_h2):
+                if max(h1, h2) == max(ult_h1, ult_h2):
                     del(ed1[it1])            # Esborrem l'edifici si l'skyline ja tenia aquesta alçada
                 else:
                     if h2 > h1:
@@ -257,7 +256,7 @@ class Skyline:
         return max([e[1] for e in self.edificis])
 
 
-### FUNCIONS AUXILIARS ###
+# FUNCIONS AUXILIARS
 
 def rg(h, w, xmin, xmax):
     """Generador aleatori d'skylines"""
@@ -285,6 +284,7 @@ def unio_rec(skylines):
 
 
 def main():
+    pass
 
     # sk1 = Skyline(1,1,2)
     # sk2 = Skyline(3,2,4)
