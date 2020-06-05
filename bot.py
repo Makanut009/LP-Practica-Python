@@ -61,11 +61,12 @@ def lst(update, context):
                 text += "\n" + str(id) + " -> " + str(sky.area())
         sortida(update, context, text)
 
-    except Exception:
+    except Exception as err:
         text = "Hi ha hagut un error. Comprova la terminal."
         sortida(update, context, text)
-        print(traceback.format_exc())
-        print(sys.exc_info())
+        print(err)
+        # print(traceback.format_exc())
+        # print(sys.exc_info())
 
 
 def clean(update, context):
@@ -86,6 +87,8 @@ def save(update, context):
             nom = id + ".sky"
             escriu_pickle(sky, nom)
             text = "Skyline guardat com a " + nom
+        else:
+            text = "Aquest identificador no existeix"
     else:
         text = "Aquest identificador no existeix"
 
@@ -104,10 +107,11 @@ def load(update, context):
         context.user_data['taula_simbols'][id] = sky
         text = "Skyline " + id + " carregat"
 
-    except FileNotFoundError:
+    except FileNotFoundError as err:
         text = "El fitxer " + nom + " no existeix"
-    except Exception:
+    except Exception as err:
         text = "Error en carregar l'Skyline. Comprova la terminal"
+        print(err)
 
     sortida(update, context, text)
 
@@ -198,7 +202,8 @@ def entrada(update, context):
         sortida(update, context, "Àrea: " + str(sk.area()))
         sortida(update, context, "Alçada: " + str(sk.alcada()))
 
-        context.user_data['taula_simbols'][var] = sk
+        if var is not None:
+            context.user_data['taula_simbols'][var] = sk
 
     except ParseError:
         text = "Error en parsejar l'expressió."
