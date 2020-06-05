@@ -1,5 +1,4 @@
 import random
-import time
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
@@ -65,7 +64,7 @@ class Skyline:
         """Negació d'skylines"""
         if not self.edificis:
             return Skyline()
-        
+
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
         xs = [-e[0]+esq+dreta for e in reversed(self.edificis)]
         hs = [e[1] for e in reversed(self.edificis[:-1])] + [0]
@@ -284,106 +283,6 @@ def unio_rec(skylines):
     sk1 = unio_rec(skylines[:len(skylines)//2])
     sk2 = unio_rec(skylines[len(skylines)//2:])
     return sk1.unio(sk2)
-
-
-def main():
-    pass
-
-    # sk1 = Skyline(1,1,2)
-    # sk2 = Skyline(3,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(3,2,4)
-    # sk2 = Skyline(1,1,2)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,1,3)
-    # sk2 = Skyline(1,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,2,4)
-    # sk2 = Skyline(2,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(2,2,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,2,3)
-    # sk2 = Skyline(2,1,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,2,4)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,1,4)
-    # sk2 = Skyline(1,2,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(2,1,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,1,4)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,1,2)
-    # sk2 = Skyline(2,1,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,1,3)
-    # sk2 = Skyline(1,1,2)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(1,1,4)
-    # sk2 = Skyline(2,2,3)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    # sk1 = Skyline(2,2,3)
-    # sk2 = Skyline(1,1,4)
-    # skn = sk1.unio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
-
-    start1 = time.time()
-    sk = Skyline(100000, 20, 3, 1, 10000)
-    end1 = time.time()
-    print(end1 - start1)
-    sk.mostra()
 
 
 if __name__ == "__main__":
