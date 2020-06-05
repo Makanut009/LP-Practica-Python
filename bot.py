@@ -129,14 +129,15 @@ def genera_grafic(sk: Skyline):
     xs = []
     hs = []
     ws = []
-    e1 = sk.edificis[0]
-    for i in range(1, len(sk.edificis)):
-        e2 = sk.edificis[i]
-        if e1[1] > 0:
-            xs.append(e1[0])
-            hs.append(e1[1])
-            ws.append(e2[0] - e1[0])
-        e1 = e2
+    if sk.edificis:
+        e1 = sk.edificis[0]
+        for i in range(1, len(sk.edificis)):
+            e2 = sk.edificis[i]
+            if e1[1] > 0:
+                xs.append(e1[0])
+                hs.append(e1[1])
+                ws.append(e2[0] - e1[0])
+            e1 = e2
 
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
