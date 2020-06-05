@@ -16,7 +16,7 @@ class Skyline:
             skylines = []
             for e in args[0]:
                 skylines += [Skyline(e[0], e[1], e[2])]
-            self.edificis = (unio_rec(skylines)).edificis
+            self.edificis = (unio_rec(skylines)).edificis  # Unió recursiva d'edificis
 
         # Creació simple
         elif len(args) == 3:
@@ -27,8 +27,7 @@ class Skyline:
             self.random(args[0], args[1], args[2], args[3], args[4])
 
         else:
-            print("Nombre de paràmetres incorrectes per crear l'skyline")
-            raise Exception
+            raise Exception("Nombre de paràmetres incorrectes per crear l'skyline")
 
     def __mul__(self, other):
         """Definició de l'operació '*' per als skylines"""
@@ -39,7 +38,7 @@ class Skyline:
         else:
             return NotImplemented
 
-    def __rmul__(self, other):
+    def __rmul__(self, other):  # Definim també l'operació '*' per la dreta
         return self*other
 
     def __add__(self, other):
@@ -51,7 +50,7 @@ class Skyline:
         else:
             return NotImplemented
 
-    def __radd__(self, other):
+    def __radd__(self, other):  # Definim també l'operació '+' per la dreta
         return self+other
 
     def __sub__(self, other):
@@ -64,10 +63,8 @@ class Skyline:
     def __neg__(self):
         """Negació d'skylines"""
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
-        xs = [-e[0]+esq+dreta for e in self.edificis]
-        xs.reverse()
-        hs = [0] + [e[1] for e in self.edificis[:-1]]
-        hs.reverse()
+        xs = [-e[0]+esq+dreta for e in reversed(self.edificis)]
+        hs = [e[1] for e in reversed(self.edificis[:-1])] + [0]
 
         sk = Skyline()
         sk.edificis = list(zip(xs, hs))
@@ -81,10 +78,9 @@ class Skyline:
     def random(self, n, h, w, xmin, xmax):
         """Genera un skyline a partir d'n edificis generats aleatòriament"""
         if n < 1 or h < 0 or w < 1 or xmax <= xmin:
-            print("Paràmetres per a la generació aleatòria incorrectes")
-            raise Exception
-        skylines = [next(rg(h, w, xmin, xmax)) for _ in range(n)]
-        self.edificis = (unio_rec(skylines)).edificis
+            raise Exception("Paràmetres per a la generació aleatòria incorrectes")
+        skylines = [next(rg(h, w, xmin, xmax)) for _ in range(n)]   # Ús d'un generador aleatori
+        self.edificis = (unio_rec(skylines)).edificis               # Unió recursiva d'edificis
 
     def mostra(self):
         """Genera i mostra la figura de l'skyline"""
@@ -220,6 +216,10 @@ class Skyline:
 
     def replica_skyline(self, N):
         """Replica l'skyline N vegades"""
+        if N < 0:
+            raise Exception("No es pot replicar un skyline un nombre negatiu de vegades")
+        if N == 0:
+            return Skyline()
         xmin = self.edificis[0][0]
         xmax = self.edificis[-1][0]
         mida = xmax - xmin
@@ -271,10 +271,10 @@ def rg(h, w, xmin, xmax):
 
 def unio_rec(skylines):
     """Uneix la llista d'skylines recursivament"""
-    if len(skylines) == 1:
+    if len(skylines) == 1:  # Cas base 1: un sol skyline
         return skylines[0]
 
-    if len(skylines) == 2:
+    if len(skylines) == 2:  # Cas base 2: dos skylines
         return skylines[0].unio(skylines[1])
 
     sk1 = unio_rec(skylines[:len(skylines)//2])
@@ -374,19 +374,23 @@ def main():
     # print(skn.edificis)
     # skn.mostra()
 
+    # sk1 = Skyline(1,2,3)
+    # skn = sk1+(-3)
+    # sk1.mostra()
+    # skn.mostra()
 
-    # #sk1 = Skyline()
+    # sk1 = Skyline()
     # sk2 = Skyline(1, 2, 3)
     # sk3 = Skyline(2,3,4)
-    # #sk3 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
+    #sk4 = Skyline([(0, 3, 1), (1, 1, 2), (3, 3, 4)])
     #sk4 = Skyline(100000, 20, 3, 1, 10000)
-    # #sk5 = Skyline(5, 10, 3, 0, 100)
-    # start1 = time.time()
-    # #sk4 = Skyline(100000, 20, 3, 1, 10000)
-    # skn = sk2.unio(sk3)
-    # end1 = time.time()
-    #sk4.mostra()
-    # print(end1 - start1)
+    # sk4 = Skyline(5, 10, 3, 0, 100)
+    start1 = time.time()
+    skn = -sk4
+    end1 = time.time()
+    sk4.mostra()
+    skn.mostra()
+    print(end1 - start1)
 
 
 if __name__ == "__main__":
