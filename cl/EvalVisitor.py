@@ -25,8 +25,8 @@ class EvalVisitor(ParseTreeVisitor):
     def visitAssig(self, ctx: SkylineParser.AssigContext):
         ident = ctx.VAR().getText()
         valor = self.visit(ctx.expr())
-        self.taula_simbols[ident] = res
-        return (ident, res)
+        self.taula_simbols[ident] = valor
+        return (ident, valor)
 
     # Visit a parse tree produced by SkylineParser#expr.
     def visitExpr(self, ctx: SkylineParser.ExprContext):
