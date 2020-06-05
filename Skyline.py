@@ -63,6 +63,9 @@ class Skyline:
 
     def __neg__(self):
         """Negació d'skylines"""
+        if not self.edificis:
+            return Skyline()
+        
         esq, dreta = self.edificis[0][0], self.edificis[-1][0]
         xs = [-e[0]+esq+dreta for e in reversed(self.edificis)]
         hs = [e[1] for e in reversed(self.edificis[:-1])] + [0]
@@ -217,6 +220,10 @@ class Skyline:
             raise Exception("No es pot replicar un skyline un nombre negatiu de vegades")
         if N == 0:
             return Skyline()
+
+        if not self.edificis:
+            return Skyline()
+
         xmin = self.edificis[0][0]
         xmax = self.edificis[-1][0]
         mida = xmax - xmin
