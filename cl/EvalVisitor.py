@@ -25,7 +25,6 @@ class EvalVisitor(ParseTreeVisitor):
     def visitAssig(self, ctx: SkylineParser.AssigContext):
         ident = ctx.VAR().getText()
         valor = self.visit(ctx.expr())
-        self.taula_simbols[ident] = valor
         return (ident, valor)
 
     # Visit a parse tree produced by SkylineParser#expr.
@@ -33,7 +32,7 @@ class EvalVisitor(ParseTreeVisitor):
         if ctx.getChildCount() == 1:
             return self.visit(next(ctx.getChildren()))
 
-        elif ctx.getChildCount() == 2:
+        elif ctx.getChildCount() == 2:  # Negació
             return - self.visit(ctx.simbol())
 
         elif ctx.getChildCount() == 3:
@@ -58,11 +57,11 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#simbol.
     def visitSimbol(self, ctx: SkylineParser.SimbolContext):
-        if ctx.VAR() is not None:
+        if ctx.VAR() is not None:                       # Variable
             return self.taula_simbols[ctx.getText()]
-        elif ctx.NUM() is not None:
+        elif ctx.NUM() is not None:                     # Número
             return int(ctx.getText())
-        else:
+        else:                                           # Edifici
             edifici = self.visit(ctx.edifici())
             return Skyline(edifici[0], edifici[1], edifici[2])
 
@@ -76,10 +75,12 @@ class EvalVisitor(ParseTreeVisitor):
     def visitCompost(self, ctx: SkylineParser.CompostContext):
         g = ctx.getChildren()
         edificis = []
+        # Afegir cada edifici a una llista
         for i in range(ctx.getChildCount()):
             ch = next(g)
             if not isinstance(ch, tree.Tree.TerminalNode):
                 edificis += [self.visit(ch)]
+        # Retornar la creació composta a partir de la llista
         return Skyline(edificis)
 
     # Visit a parse tree produced by SkylineParser#random.
