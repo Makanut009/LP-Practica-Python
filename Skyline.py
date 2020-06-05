@@ -130,7 +130,7 @@ class Skyline:
                 it1 += 1
                 it2 += 1
 
-            elif x1 < x2:
+            elif x1 < x2:  # Si l'ed1 és a l'esquerra de l'ed2
                 if h1 >= ult_h2:
                     it1 += 1
                 elif ult_h1 > ult_h2:
@@ -140,7 +140,7 @@ class Skyline:
                     del ed1[it1]
                 ult_h1 = h1
 
-            else:
+            else:  # Si l'ed2 és a l'esquerra de l'ed1
                 if h2 > ult_h1:
                     ed1.insert(it1, (x2, h2))
                     it1 += 1
