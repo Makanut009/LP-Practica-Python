@@ -9,33 +9,33 @@ def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20")
         buf.write("\\\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
-        buf.write("\t\b\4\t\t\t\3\2\3\2\3\2\3\3\3\3\5\3\30\n\3\3\4\3\4\3")
-        buf.write("\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5(\n")
-        buf.write("\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\7\5\63\n\5\f\5")
-        buf.write("\16\5\66\13\5\3\6\3\6\3\6\5\6;\n\6\3\7\3\7\3\7\3\7\3\7")
+        buf.write("\t\b\4\t\t\t\3\2\3\2\5\2\25\n\2\3\2\3\2\3\3\3\3\3\3\3")
+        buf.write("\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4&\n\4\3\4\3")
+        buf.write("\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\7\4\61\n\4\f\4\16\4\64")
+        buf.write("\13\4\3\5\3\5\3\6\3\6\3\6\5\6;\n\6\3\7\3\7\3\7\3\7\3\7")
         buf.write("\3\7\3\7\3\7\3\b\3\b\3\b\3\b\7\bI\n\b\f\b\16\bL\13\b\3")
         buf.write("\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t")
-        buf.write("\3\t\2\3\b\n\2\4\6\b\n\f\16\20\2\2\2^\2\22\3\2\2\2\4\27")
-        buf.write("\3\2\2\2\6\31\3\2\2\2\b\'\3\2\2\2\n:\3\2\2\2\f<\3\2\2")
-        buf.write("\2\16D\3\2\2\2\20O\3\2\2\2\22\23\5\4\3\2\23\24\7\2\2\3")
-        buf.write("\24\3\3\2\2\2\25\30\5\6\4\2\26\30\5\b\5\2\27\25\3\2\2")
-        buf.write("\2\27\26\3\2\2\2\30\5\3\2\2\2\31\32\7\13\2\2\32\33\7\3")
-        buf.write("\2\2\33\34\5\b\5\2\34\7\3\2\2\2\35\36\b\5\1\2\36(\5\n")
-        buf.write("\6\2\37(\5\16\b\2 (\5\20\t\2!\"\7\t\2\2\"#\5\b\5\2#$\7")
-        buf.write("\n\2\2$(\3\2\2\2%&\7\17\2\2&(\5\n\6\2\'\35\3\2\2\2\'\37")
-        buf.write("\3\2\2\2\' \3\2\2\2\'!\3\2\2\2\'%\3\2\2\2(\64\3\2\2\2")
-        buf.write(")*\f\7\2\2*+\7\r\2\2+\63\5\b\5\b,-\f\6\2\2-.\7\16\2\2")
-        buf.write(".\63\5\b\5\7/\60\f\5\2\2\60\61\7\17\2\2\61\63\5\b\5\6")
-        buf.write("\62)\3\2\2\2\62,\3\2\2\2\62/\3\2\2\2\63\66\3\2\2\2\64")
-        buf.write("\62\3\2\2\2\64\65\3\2\2\2\65\t\3\2\2\2\66\64\3\2\2\2\67")
-        buf.write(";\5\f\7\28;\7\13\2\29;\7\f\2\2:\67\3\2\2\2:8\3\2\2\2:")
-        buf.write("9\3\2\2\2;\13\3\2\2\2<=\7\t\2\2=>\7\f\2\2>?\7\4\2\2?@")
-        buf.write("\7\f\2\2@A\7\4\2\2AB\7\f\2\2BC\7\n\2\2C\r\3\2\2\2DE\7")
-        buf.write("\5\2\2EJ\5\f\7\2FG\7\4\2\2GI\5\f\7\2HF\3\2\2\2IL\3\2\2")
-        buf.write("\2JH\3\2\2\2JK\3\2\2\2KM\3\2\2\2LJ\3\2\2\2MN\7\6\2\2N")
-        buf.write("\17\3\2\2\2OP\7\7\2\2PQ\7\f\2\2QR\7\4\2\2RS\7\f\2\2ST")
-        buf.write("\7\4\2\2TU\7\f\2\2UV\7\4\2\2VW\7\f\2\2WX\7\4\2\2XY\7\f")
-        buf.write("\2\2YZ\7\b\2\2Z\21\3\2\2\2\b\27\'\62\64:J")
+        buf.write("\3\t\2\3\6\n\2\4\6\b\n\f\16\20\2\3\3\2\13\f\2]\2\24\3")
+        buf.write("\2\2\2\4\30\3\2\2\2\6%\3\2\2\2\b\65\3\2\2\2\n:\3\2\2\2")
+        buf.write("\f<\3\2\2\2\16D\3\2\2\2\20O\3\2\2\2\22\25\5\4\3\2\23\25")
+        buf.write("\5\6\4\2\24\22\3\2\2\2\24\23\3\2\2\2\25\26\3\2\2\2\26")
+        buf.write("\27\7\2\2\3\27\3\3\2\2\2\30\31\7\13\2\2\31\32\7\3\2\2")
+        buf.write("\32\33\5\6\4\2\33\5\3\2\2\2\34\35\b\4\1\2\35&\5\b\5\2")
+        buf.write("\36&\5\n\6\2\37 \7\t\2\2 !\5\6\4\2!\"\7\n\2\2\"&\3\2\2")
+        buf.write("\2#$\7\17\2\2$&\5\6\4\6%\34\3\2\2\2%\36\3\2\2\2%\37\3")
+        buf.write("\2\2\2%#\3\2\2\2&\62\3\2\2\2\'(\f\5\2\2()\7\r\2\2)\61")
+        buf.write("\5\6\4\6*+\f\4\2\2+,\7\17\2\2,\61\5\6\4\5-.\f\3\2\2./")
+        buf.write("\7\16\2\2/\61\5\6\4\4\60\'\3\2\2\2\60*\3\2\2\2\60-\3\2")
+        buf.write("\2\2\61\64\3\2\2\2\62\60\3\2\2\2\62\63\3\2\2\2\63\7\3")
+        buf.write("\2\2\2\64\62\3\2\2\2\65\66\t\2\2\2\66\t\3\2\2\2\67;\5")
+        buf.write("\f\7\28;\5\16\b\29;\5\20\t\2:\67\3\2\2\2:8\3\2\2\2:9\3")
+        buf.write("\2\2\2;\13\3\2\2\2<=\7\t\2\2=>\7\f\2\2>?\7\4\2\2?@\7\f")
+        buf.write("\2\2@A\7\4\2\2AB\7\f\2\2BC\7\n\2\2C\r\3\2\2\2DE\7\5\2")
+        buf.write("\2EJ\5\f\7\2FG\7\4\2\2GI\5\f\7\2HF\3\2\2\2IL\3\2\2\2J")
+        buf.write("H\3\2\2\2JK\3\2\2\2KM\3\2\2\2LJ\3\2\2\2MN\7\6\2\2N\17")
+        buf.write("\3\2\2\2OP\7\7\2\2PQ\7\f\2\2QR\7\4\2\2RS\7\f\2\2ST\7\4")
+        buf.write("\2\2TU\7\f\2\2UV\7\4\2\2VW\7\f\2\2WX\7\4\2\2XY\7\f\2\2")
+        buf.write("YZ\7\b\2\2Z\21\3\2\2\2\b\24%\60\62:J")
         return buf.getvalue()
 
 
@@ -54,19 +54,19 @@ class SkylineParser ( Parser ):
                      "'-'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "<INVALID>", "LPAREN", "RPAREN", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "PARES", "PARDR", 
                       "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
 
     RULE_root = 0
-    RULE_instruccio = 1
-    RULE_assig = 2
-    RULE_expr = 3
-    RULE_simbol = 4
+    RULE_assig = 1
+    RULE_expr = 2
+    RULE_simbol = 3
+    RULE_skyline = 4
     RULE_edifici = 5
     RULE_compost = 6
     RULE_random = 7
 
-    ruleNames =  [ "root", "instruccio", "assig", "expr", "simbol", "edifici", 
+    ruleNames =  [ "root", "assig", "expr", "simbol", "skyline", "edifici", 
                    "compost", "random" ]
 
     EOF = Token.EOF
@@ -76,8 +76,8 @@ class SkylineParser ( Parser ):
     T__3=4
     T__4=5
     T__5=6
-    LPAREN=7
-    RPAREN=8
+    PARES=7
+    PARDR=8
     VAR=9
     NUM=10
     PER=11
@@ -99,12 +99,16 @@ class SkylineParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def instruccio(self):
-            return self.getTypedRuleContext(SkylineParser.InstruccioContext,0)
-
-
         def EOF(self):
             return self.getToken(SkylineParser.EOF, 0)
+
+        def assig(self):
+            return self.getTypedRuleContext(SkylineParser.AssigContext,0)
+
+
+        def expr(self):
+            return self.getTypedRuleContext(SkylineParser.ExprContext,0)
+
 
         def getRuleIndex(self):
             return SkylineParser.RULE_root
@@ -124,64 +128,22 @@ class SkylineParser ( Parser ):
         self.enterRule(localctx, 0, self.RULE_root)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 16
-            self.instruccio()
-            self.state = 17
-            self.match(SkylineParser.EOF)
-        except RecognitionException as re:
-            localctx.exception = re
-            self._errHandler.reportError(self, re)
-            self._errHandler.recover(self, re)
-        finally:
-            self.exitRule()
-        return localctx
-
-    class InstruccioContext(ParserRuleContext):
-
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-
-        def assig(self):
-            return self.getTypedRuleContext(SkylineParser.AssigContext,0)
-
-
-        def expr(self):
-            return self.getTypedRuleContext(SkylineParser.ExprContext,0)
-
-
-        def getRuleIndex(self):
-            return SkylineParser.RULE_instruccio
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitInstruccio" ):
-                return visitor.visitInstruccio(self)
-            else:
-                return visitor.visitChildren(self)
-
-
-
-
-    def instruccio(self):
-
-        localctx = SkylineParser.InstruccioContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 2, self.RULE_instruccio)
-        try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 21
+            self.state = 18
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,0,self._ctx)
             if la_ == 1:
-                self.state = 19
+                self.state = 16
                 self.assig()
                 pass
 
             elif la_ == 2:
-                self.state = 20
+                self.state = 17
                 self.expr(0)
                 pass
 
 
+            self.state = 20
+            self.match(SkylineParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -218,14 +180,14 @@ class SkylineParser ( Parser ):
     def assig(self):
 
         localctx = SkylineParser.AssigContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 4, self.RULE_assig)
+        self.enterRule(localctx, 2, self.RULE_assig)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 23
+            self.state = 22
             self.match(SkylineParser.VAR)
-            self.state = 24
+            self.state = 23
             self.match(SkylineParser.T__0)
-            self.state = 25
+            self.state = 24
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
@@ -245,16 +207,12 @@ class SkylineParser ( Parser ):
             return self.getTypedRuleContext(SkylineParser.SimbolContext,0)
 
 
-        def compost(self):
-            return self.getTypedRuleContext(SkylineParser.CompostContext,0)
+        def skyline(self):
+            return self.getTypedRuleContext(SkylineParser.SkylineContext,0)
 
 
-        def random(self):
-            return self.getTypedRuleContext(SkylineParser.RandomContext,0)
-
-
-        def LPAREN(self):
-            return self.getToken(SkylineParser.LPAREN, 0)
+        def PARES(self):
+            return self.getToken(SkylineParser.PARES, 0)
 
         def expr(self, i:int=None):
             if i is None:
@@ -263,8 +221,8 @@ class SkylineParser ( Parser ):
                 return self.getTypedRuleContext(SkylineParser.ExprContext,i)
 
 
-        def RPAREN(self):
-            return self.getToken(SkylineParser.RPAREN, 0)
+        def PARDR(self):
+            return self.getToken(SkylineParser.PARDR, 0)
 
         def MENYS(self):
             return self.getToken(SkylineParser.MENYS, 0)
@@ -291,47 +249,42 @@ class SkylineParser ( Parser ):
         _parentState = self.state
         localctx = SkylineParser.ExprContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 6
-        self.enterRecursionRule(localctx, 6, self.RULE_expr, _p)
+        _startState = 4
+        self.enterRecursionRule(localctx, 4, self.RULE_expr, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 37
+            self.state = 35
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
             if la_ == 1:
-                self.state = 28
+                self.state = 27
                 self.simbol()
                 pass
 
             elif la_ == 2:
-                self.state = 29
-                self.compost()
+                self.state = 28
+                self.skyline()
                 pass
 
             elif la_ == 3:
+                self.state = 29
+                self.match(SkylineParser.PARES)
                 self.state = 30
-                self.random()
+                self.expr(0)
+                self.state = 31
+                self.match(SkylineParser.PARDR)
                 pass
 
             elif la_ == 4:
-                self.state = 31
-                self.match(SkylineParser.LPAREN)
-                self.state = 32
-                self.expr(0)
                 self.state = 33
-                self.match(SkylineParser.RPAREN)
-                pass
-
-            elif la_ == 5:
-                self.state = 35
                 self.match(SkylineParser.MENYS)
-                self.state = 36
-                self.simbol()
+                self.state = 34
+                self.expr(4)
                 pass
 
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 50
+            self.state = 48
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -339,50 +292,50 @@ class SkylineParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 48
+                    self.state = 46
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
                     if la_ == 1:
                         localctx = SkylineParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 39
-                        if not self.precpred(self._ctx, 5):
+                        self.state = 37
+                        if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 40
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
+                        self.state = 38
                         self.match(SkylineParser.PER)
-                        self.state = 41
-                        self.expr(6)
+                        self.state = 39
+                        self.expr(4)
                         pass
 
                     elif la_ == 2:
                         localctx = SkylineParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 42
-                        if not self.precpred(self._ctx, 4):
+                        self.state = 40
+                        if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 43
-                        self.match(SkylineParser.MES)
-                        self.state = 44
-                        self.expr(5)
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
+                        self.state = 41
+                        self.match(SkylineParser.MENYS)
+                        self.state = 42
+                        self.expr(3)
                         pass
 
                     elif la_ == 3:
                         localctx = SkylineParser.ExprContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 45
-                        if not self.precpred(self._ctx, 3):
+                        self.state = 43
+                        if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 46
-                        self.match(SkylineParser.MENYS)
-                        self.state = 47
-                        self.expr(4)
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
+                        self.state = 44
+                        self.match(SkylineParser.MES)
+                        self.state = 45
+                        self.expr(2)
                         pass
 
              
-                self.state = 52
+                self.state = 50
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
 
@@ -399,10 +352,6 @@ class SkylineParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-
-        def edifici(self):
-            return self.getTypedRuleContext(SkylineParser.EdificiContext,0)
-
 
         def VAR(self):
             return self.getToken(SkylineParser.VAR, 0)
@@ -425,25 +374,77 @@ class SkylineParser ( Parser ):
     def simbol(self):
 
         localctx = SkylineParser.SimbolContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 8, self.RULE_simbol)
+        self.enterRule(localctx, 6, self.RULE_simbol)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 51
+            _la = self._input.LA(1)
+            if not(_la==SkylineParser.VAR or _la==SkylineParser.NUM):
+                self._errHandler.recoverInline(self)
+            else:
+                self._errHandler.reportMatch(self)
+                self.consume()
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+    class SkylineContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def edifici(self):
+            return self.getTypedRuleContext(SkylineParser.EdificiContext,0)
+
+
+        def compost(self):
+            return self.getTypedRuleContext(SkylineParser.CompostContext,0)
+
+
+        def random(self):
+            return self.getTypedRuleContext(SkylineParser.RandomContext,0)
+
+
+        def getRuleIndex(self):
+            return SkylineParser.RULE_skyline
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSkyline" ):
+                return visitor.visitSkyline(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+
+    def skyline(self):
+
+        localctx = SkylineParser.SkylineContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 8, self.RULE_skyline)
         try:
             self.state = 56
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [SkylineParser.LPAREN]:
+            if token in [SkylineParser.PARES]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 53
                 self.edifici()
                 pass
-            elif token in [SkylineParser.VAR]:
+            elif token in [SkylineParser.T__2]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 54
-                self.match(SkylineParser.VAR)
+                self.compost()
                 pass
-            elif token in [SkylineParser.NUM]:
+            elif token in [SkylineParser.T__4]:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 55
-                self.match(SkylineParser.NUM)
+                self.random()
                 pass
             else:
                 raise NoViableAltException(self)
@@ -487,7 +488,7 @@ class SkylineParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 58
-            self.match(SkylineParser.LPAREN)
+            self.match(SkylineParser.PARES)
             self.state = 59
             self.match(SkylineParser.NUM)
             self.state = 60
@@ -499,7 +500,7 @@ class SkylineParser ( Parser ):
             self.state = 63
             self.match(SkylineParser.NUM)
             self.state = 64
-            self.match(SkylineParser.RPAREN)
+            self.match(SkylineParser.PARDR)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -631,7 +632,7 @@ class SkylineParser ( Parser ):
     def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
         if self._predicates == None:
             self._predicates = dict()
-        self._predicates[3] = self.expr_sempred
+        self._predicates[2] = self.expr_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))
@@ -640,15 +641,15 @@ class SkylineParser ( Parser ):
 
     def expr_sempred(self, localctx:ExprContext, predIndex:int):
             if predIndex == 0:
-                return self.precpred(self._ctx, 5)
+                return self.precpred(self._ctx, 3)
          
 
             if predIndex == 1:
-                return self.precpred(self._ctx, 4)
+                return self.precpred(self._ctx, 2)
          
 
             if predIndex == 2:
-                return self.precpred(self._ctx, 3)
+                return self.precpred(self._ctx, 1)
          
 
 

@@ -1,21 +1,21 @@
 grammar Skyline;
 
-root : instruccio EOF;
+root : (assig | expr) EOF;
 
-instruccio: (assig | expr);
 assig: VAR ':=' expr;
 
 expr
     : simbol
-    | compost
-    | random
+    | skyline
+    | PARES expr PARDR
+    | MENYS expr
 	| expr PER expr
-	| expr MES expr
-	| expr MENYS expr
-    | LPAREN expr RPAREN
-    | MENYS simbol;
+    | expr MENYS expr
+	| expr MES expr;    
 
-simbol: edifici | VAR | NUM;
+simbol: VAR | NUM;
+
+skyline: edifici | compost | random;
 
 edifici: '(' NUM ',' NUM ',' NUM ')';
 
@@ -23,8 +23,8 @@ compost: '[' edifici (',' edifici)* ']';
 
 random: '{' NUM ',' NUM ',' NUM ',' NUM ',' NUM '}';
 
-LPAREN: '(';
-RPAREN: ')';
+PARES: '(';
+PARDR: ')';
 VAR: [a-z] ([a-z] | [0-9])*;
 NUM : '-'? [0-9]+;
 PER : '*';

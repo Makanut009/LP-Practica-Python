@@ -14,10 +14,6 @@ class EvalVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SkylineParser#root.
     def visitRoot(self, ctx: SkylineParser.RootContext):
-        return self.visit(next(ctx.getChildren()))
-
-    # Visit a parse tree produced by SkylineParser#instruccio.
-    def visitInstruccio(self, ctx: SkylineParser.InstruccioContext):
         ch = next(ctx.getChildren())
         return self.visit(ch) if ch == ctx.assig() else (None, self.visit(ch))
 
@@ -33,7 +29,9 @@ class EvalVisitor(ParseTreeVisitor):
             return self.visit(next(ctx.getChildren()))
 
         elif ctx.getChildCount() == 2:  # Negació
-            return - self.visit(ctx.simbol())
+            g = ctx.getChildren()
+            l = [next(g) for i in range(2)]
+            return - self.visit(l[1])
 
         elif ctx.getChildCount() == 3:
             g = ctx.getChildren()
@@ -59,11 +57,17 @@ class EvalVisitor(ParseTreeVisitor):
     def visitSimbol(self, ctx: SkylineParser.SimbolContext):
         if ctx.VAR() is not None:                       # Variable
             return self.taula_simbols[ctx.getText()]
-        elif ctx.NUM() is not None:                     # Número
+        else:                                           # Número
             return int(ctx.getText())
-        else:                                           # Edifici
+
+    # Visit a parse tree produced by SkylineParser#skyline.
+    def visitSkyline(self, ctx: SkylineParser.SkylineContext):
+        ch = next(ctx.getChildren())
+        if ch == ctx.edifici():                  # Edifici
             edifici = self.visit(ctx.edifici())
             return Skyline(edifici[0], edifici[1], edifici[2])
+        else:
+            return self.visit(ch)                # Creació composta o aleatòria
 
     # Visit a parse tree produced by SkylineParser#edifici.
     def visitEdifici(self, ctx: SkylineParser.EdificiContext):

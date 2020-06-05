@@ -49,8 +49,8 @@ class SkylineLexer(Lexer):
     T__3 = 4
     T__4 = 5
     T__5 = 6
-    LPAREN = 7
-    RPAREN = 8
+    PARES = 7
+    PARDR = 8
     VAR = 9
     NUM = 10
     PER = 11
@@ -67,10 +67,10 @@ class SkylineLexer(Lexer):
             "'+'", "'-'" ]
 
     symbolicNames = [ "<INVALID>",
-            "LPAREN", "RPAREN", "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
+            "PARES", "PARDR", "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
 
-    ruleNames = [ "T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "LPAREN", 
-                  "RPAREN", "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
+    ruleNames = [ "T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "PARES", 
+                  "PARDR", "VAR", "NUM", "PER", "MES", "MENYS", "WS" ]
 
     grammarFileName = "Skyline.g4"
 
