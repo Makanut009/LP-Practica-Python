@@ -162,8 +162,9 @@ class Skyline:
     def interseccio(self, sky2):
         """Computa la intersecció de dos skylines"""
 
-        ed1 = self.edificis.copy()
+        ed1 = self.edificis
         ed2 = sky2.edificis
+        res = []
 
         if not ed1 or not ed2:
             return Skyline()
@@ -177,12 +178,12 @@ class Skyline:
         it1 = it2 = 0
         ult_h1 = ult_h2 = 0  # Darrera alçada llegida de cada skyline
 
-        while it1 != len(ed1)-1 or it2 != len(ed2)-1:
+        while it1 != len(ed1) and it2 != len(ed2):
             (x1, h1) = ed1[it1]
             (x2, h2) = ed2[it2]
 
             if x1 == x2:  # Si els dos edificis tenen la mateixa x
-                ed1[it1] = (x1, min(h1, h2))
+                res.append((x1, min(h1, h2)))
                 ult_h1 = h1
                 ult_h2 = h2
                 it1 += 1
@@ -190,29 +191,22 @@ class Skyline:
 
             elif x1 < x2:  # Si l'ed1 és a l'esquerra de l'ed2
                 if h1 <= ult_h2:
-                    it1 += 1                 # Mantenim l'edifici
+                    res.append((x1, h1))        # Afegim l'edifici si és més baix
                 elif ult_h1 < ult_h2:
-                    ed1[it1] = (x1, ult_h2)  # Pugem només fins a ult_h2
-                    it1 += 1
-                else:
-                    del ed1[it1]             # Eliminem l'edifici
+                    res.append((x1, ult_h2))    # Pugem només fins a ult_h2
+                it1 += 1
                 ult_h1 = h1
 
             else:  # Si l'ed2 és a l'esquerra de l'ed1
                 if h2 < ult_h1:
-                    ed1.insert(it1, (x2, h2))       # Afegim l'edifici si és més baix
-                    it1 += 1
+                    res.append((x2, h2))        # Afegim l'edifici si és més baix
                 elif ult_h2 < ult_h1:
-                    ed1.insert(it1, (x2, ult_h1))   # Pugem només fins a ult_h1
-                    it1 += 1
+                    res.append((x2, ult_h1))    # Pugem només fins a ult_h1
                 it2 += 1
                 ult_h2 = h2
 
-        if ed2[-1][0] < ed1[-1][0]:  # Gestió del darrer edifici
-            ed1[-1] = ed2[-1]
-
         nou_sky = Skyline()
-        nou_sky.edificis = ed1
+        nou_sky.edificis = res
         return nou_sky
 
     def replica_skyline(self, N):
@@ -286,95 +280,95 @@ def unio_rec(skylines):
 def main():
     pass
 
-    # sk1 = Skyline(1,1,2)
-    # sk2 = Skyline(3,2,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,2)
+    sk2 = Skyline(3,2,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(3,2,4)
-    # sk2 = Skyline(1,1,2)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(3,2,4)
+    sk2 = Skyline(1,1,2)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,3)
-    # sk2 = Skyline(1,2,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,3)
+    sk2 = Skyline(1,2,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,2,4)
-    # sk2 = Skyline(2,1,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,2,4)
+    sk2 = Skyline(2,1,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(2,2,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,3)
+    sk2 = Skyline(2,2,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,2,3)
-    # sk2 = Skyline(2,1,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,2,3)
+    sk2 = Skyline(2,1,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,2,4)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,2,4)
+    sk2 = Skyline(1,1,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,4)
-    # sk2 = Skyline(1,2,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,4)
+    sk2 = Skyline(1,2,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(2,1,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,3)
+    sk2 = Skyline(2,1,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,4)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,4)
+    sk2 = Skyline(1,1,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,3)
-    # sk2 = Skyline(1,1,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,3)
+    sk2 = Skyline(1,1,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,2)
-    # sk2 = Skyline(2,1,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,2)
+    sk2 = Skyline(2,1,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,1,3)
-    # sk2 = Skyline(1,1,2)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,1,3)
+    sk2 = Skyline(1,1,2)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(1,1,4)
-    # sk2 = Skyline(2,2,3)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(1,1,4)
+    sk2 = Skyline(2,2,3)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
-    # sk1 = Skyline(2,2,3)
-    # sk2 = Skyline(1,1,4)
-    # skn = sk1.interseccio(sk2)
-    # print(skn.edificis)
-    # skn.mostra()
+    sk1 = Skyline(2,2,3)
+    sk2 = Skyline(1,1,4)
+    skn = sk1.interseccio(sk2)
+    print(skn.edificis)
+    skn.mostra()
 
     # sk1 = Skyline(1,2,3)
     # skn = sk1+(-3)
