@@ -69,33 +69,47 @@ def clean(update, context):
 
 def save(update, context):
     """Guarda l'skyline id amb nom id.sky"""
-    id = ' '.join(context.args)
-    if 'taula_simbols' in context.user_data:
-        ts = context.user_data['taula_simbols']
-        if id in ts:
-            sky = ts[id]
-            nom = id + ".sky"
-            escriu_pickle(sky, nom)
-            text = "Skyline guardat com a " + nom
+    try:
+        id = ' '.join(context.args)
+        if 'taula_simbols' in context.user_data:
+            ts = context.user_data['taula_simbols']
+            if id in ts:
+                sky = ts[id]
+                nom = id + ".sky"
+                path = "./data/" + str(update.effective_chat.username)
+                if not os.path.exists("./data"):
+                    os.mkdir("./data")
+                if not os.path.exists(path):
+                    os.mkdir(path)
+                escriu_pickle(sky, path + "/" + nom)
+                text = "Skyline guardat com a " + nom
+            else:
+                text = "Aquest identificador no existeix"
         else:
             text = "Aquest identificador no existeix"
-    else:
-        text = "Aquest identificador no existeix"
 
-    sortida(update, context, text)
+        sortida(update, context, text)
+
+    except Exception as err:
+        text = "Error en guardar l'Skyline. Comprova la terminal"
+        print("Excepció: " + str(err))
 
 
 def load(update, context):
     """Carrega l'skyline id de l’arxiu id.sky"""
     id = ' '.join(context.args)
     nom = id + ".sky"
+    path = "./data/" + str(update.effective_chat.username) + "/" + nom
 
     try:
-        sky = llegeix_pickle(nom)
-        if 'taula_simbols' not in context.user_data:
-            context.user_data['taula_simbols'] = {}
-        context.user_data['taula_simbols'][id] = sky
-        text = "Skyline " + id + " carregat"
+        if os.path.exists(path):
+            sky = llegeix_pickle(path)
+            if 'taula_simbols' not in context.user_data:
+                context.user_data['taula_simbols'] = {}
+            context.user_data['taula_simbols'][id] = sky
+            text = "Skyline " + id + " carregat"
+        else:
+            raise FileNotFoundError
 
     except FileNotFoundError as err:
         text = "El fitxer " + nom + " no existeix"
@@ -106,15 +120,15 @@ def load(update, context):
     sortida(update, context, text)
 
 
-def llegeix_pickle(fitxer: str):
+def llegeix_pickle(path: str):
     """Llegeix un objecte d'un fitxer pickle."""
-    with open(fitxer, "rb") as file:
+    with open(path, "rb") as file:
         return pickle.load(file)
 
 
-def escriu_pickle(obj: object, fitxer: str):
+def escriu_pickle(obj: object, path: str):
     """Guarda un objecte en un fitxer pickle."""
-    with open(fitxer, "wb") as file:
+    with open(path, "wb") as file:
         return pickle.dump(obj, file)
 
 
