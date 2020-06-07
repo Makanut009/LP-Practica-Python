@@ -101,11 +101,13 @@ class Skyline:
                     ws.append(e2[0] - e1[0])
                 e1 = e2
 
-        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.bar(xs, hs, width=ws, align='edge', color=['red'])
-        plt.show()
-        plt.close()
+            plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+            plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+            plt.bar(xs, hs, width=ws, align='edge', color=['red'])
+            plt.show()
+            plt.close()
+        else:
+            print("L'skyline és buit")
 
     def unio(self, sky2):
         """Computa la unió de dos skylines"""
@@ -217,10 +219,7 @@ class Skyline:
         """Replica l'skyline N vegades"""
         if N < 0:
             raise Exception("No es pot replicar un skyline un nombre negatiu de vegades")
-        if N == 0:
-            return Skyline()
-
-        if not self.edificis:
+        if N == 0 or not self.edificis:
             return Skyline()
 
         xmin = self.edificis[0][0]
