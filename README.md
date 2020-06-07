@@ -5,8 +5,8 @@ Facultat d'Informàtica de Barcelona, UPC. Juny de 2020.
 
 ## Prerequisits
 
-Perquè el bot funcioni cal tenir instal·lats els paquets que es detallen al fitxer ```requirements.txt```. Són els bàsics
-mencionats a l'enunciat, i es poden instal·lar mitjançant pip3:
+Perquè el bot funcioni cal tenir instal·lats els paquets que es mencionen a l'enunaciat. Estan especificats al fitxer
+```requirements.txt```, i es poden instal·lar mitjançant pip3:
 ```bash
 $ pip3 install -r requirements.txt
 ```
@@ -15,7 +15,7 @@ A més, cal tenir instal·lat Telegram en algun dispositiu.
 ## Execució
 
 Per córrer el bot cal executar ```python3 bot.py``` des del directori arrel.
-Un cop fet això, tan sols cal enviar missatges al bot (usuari @SkyLine4Bot) mitjançant Telegram, seguint les pautes que es detallen a l'enunciat.
+Un cop fet això, tan sols cal enviar missatges al bot (usuari `@SkyLine4Bot`) mitjançant Telegram, seguint les pautes que es detallen a l'enunciat.
 
 ## Detalls de la implementació
 
@@ -26,9 +26,9 @@ El detalls més destacables de la implementació del bot són els següents:
    s'actualitza quan hi ha una assignació, es carrega un nou skyline o es buida la llista explícitament.
  - Controla els errors durant el parsejat: he implementat una classe senzilla que hereda d'```ErrorListener```
    i creat una nova excepció per tal de detectar quan es produeixen errors durant el parsejat de l'expressió.
-   Sinó, és difícil saber què ha provocat l'error.
+   D'aquesta manera és més fàcil detectar la causa dels errors.
  - Quan es genera la figura d'un skyline, es guarda temporalment en un fitxer tmp.png, que s'elimina un cop
-   enviat al xat de Telegram.
+   enviat al xat de Telegram. Si l'skyline és buit, no es mostra cap imatge, sinó un missatge indicant-ho.
 
 
 ### Classe Skyline
@@ -71,12 +71,12 @@ skyline directament, sense fer comparacions).
 
 Per a les altres operacions entre skylines (replicació, desplaçaments i negació) també he intentat minimitzar-ne al màxim
 la complexitat. He fet ús d'elements molt útils del llenguatge, com ara funcions anònimes, funcions d'ordre superior, i
-llistes per comprensió. Per exemple, en el cas de la negació (mirall) d'skylines, he usat la funció reverseD(), que retorna
+llistes per comprensió. Per exemple, en el cas de la negació (mirall) d'skylines, he usat la funció `reverseD()`, que retorna
 un iterador que recorre la llista en sentit invers, ja que és més eficient que crear la llista recorrent-la en sentit
-normal i després girar-la amb reverse().
+normal i després girar-la amb `reverse()`, que té cost lineal.
 
 
-#### Gramàtica i visitor
+### Gramàtica i visitor
 
 La gramàtica segueix l'estructura que es pot intuïr de l'enunciat:
  - el missatge (root) és o bé una assignació, o bé una expressió
@@ -87,7 +87,7 @@ La gramàtica segueix l'estructura que es pot intuïr de l'enunciat:
 He procurat que es compleixi l'ordre de prioritat entre operacions que marca l'enunciat.
 
 El visitor senzillament recorre l'arbre generat seguint l'estructura explicada, i retorna una parella
-(identificador, skyline), on l'identificador es correspon a la variable en cas d'una assignació i és None 
+(identificador, skyline), on l'identificador es correspon a la variable en cas d'una assignació, i és None 
 en cas que només sigui una expressió. L'skyline retornat és el resultant d'avaluar l'expressió. 
 En inicialitzar el visitor, el bot li passa com a paràmetre la taula de símbols de l'usuari, per poder
 accedir als valors dels identificadors ja definits.
