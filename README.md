@@ -29,6 +29,9 @@ El detalls més destacables de la implementació del bot són els següents:
    D'aquesta manera és més fàcil detectar la causa dels errors.
  - Quan es genera la figura d'un skyline, es guarda temporalment en un fitxer tmp.png, que s'elimina un cop
    enviat al xat de Telegram. Si l'skyline és buit, no es mostra cap imatge, sinó un missatge indicant-ho.
+ - Quan es guarda un skyline amb la comanda `/save id`, el fitxer `id.sky` es guarda a un directori individual de
+   l'usuari dins de la carpeta `data` (per exemple, `/data/jordi_cluet`).
+   Nota: El directori `data` es crea quan algun usuari guarda un skyline per primer cop.
 
 
 ### Classe Skyline
